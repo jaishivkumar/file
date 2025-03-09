@@ -21,40 +21,40 @@ const page = () => {
   return (
     <>
       {/* Animation */}
-      <Animation />
+    ?
 
       {/* HeaderThree */}
-      <HeaderThree />
+      {/* <HeaderThree /> */}
 
       {/* BannerThree */}
-      <BannerThree />
+      {/* <BannerThree /> */}
 
       {/* AboutAreaThree */}
-      <AboutAreaThree />
+      {/* <AboutAreaThree /> */}
 
       {/* GalleryTwo */}
-      <GalleryTwo />
+      {/* <GalleryTwo /> */}
 
       {/* TournamentOne */}
-      <TournamentOne />
+      {/* <TournamentOne /> */}
 
       {/* RoadmapOne */}
-      <RoadmapOne />
+      {/* <RoadmapOne /> */}
 
       {/* TopAdvisorsTwo */}
-      <TopAdvisorsTwo />
+      {/* <TopAdvisorsTwo /> */}
 
       {/* VideoOne */}
-      <VideoOne />
+      {/* <VideoOne /> */}
 
       {/* ProductAreaOne */}
-      <ProductAreaOne />
+      {/* <ProductAreaOne /> */}
 
       {/* BlogAreaOne */}
-      <BlogAreaOne />
+      {/* <BlogAreaOne /> */}
 
       {/* FooterThree */}
-      <FooterThree />
+      {/* <FooterThree /> */}
     </>
   );
 };

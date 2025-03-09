@@ -21,37 +21,37 @@ const page = () => {
   return (
     <>
       {/* Animation */}
-      <Animation />
+      {/* <Animation /> */}
 
       {/* HeaderOne */}
       <HeaderOne />
 
       {/* BannerOne */}
-      <BannerOne />
+      {/* <BannerOne /> */}
 
       {/* FeatureAreaOne */}
-      <FeatureAreaOne />
+      {/* <FeatureAreaOne /> */}
 
       {/* TopSellerAreaOne */}
-      <TopSellerAreaOne />
+      {/* <TopSellerAreaOne /> */}
 
       {/* AboutAreaOne */}
-      <AboutAreaOne />
+      {/* <AboutAreaOne /> */}
 
       {/* TopAuctionAreaOne */}
-      <TopAuctionAreaOne />
+      {/* <TopAuctionAreaOne /> */}
 
       {/* BlockChainGalleryAreaOne */}
-      <BlockChainGalleryAreaOne />
+      {/* <BlockChainGalleryAreaOne /> */}
 
       {/* CreatorAreaOne */}
-      <CreatorAreaOne />
+      {/* <CreatorAreaOne /> */}
 
       {/* TestimonialAreaOne */}
-      <TestimonialAreaOne />
+      {/* <TestimonialAreaOne /> */}
 
       {/* PartnerAreaOne */}
-      <PartnerAreaOne />
+      {/* <PartnerAreaOne /> */}
 
       {/* FooterOne */}
       <FooterOne />
