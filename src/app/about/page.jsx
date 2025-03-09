@@ -16,25 +16,25 @@ const page = () => {
   return (
     <>
       {/* Animation */}
-      <Animation />
+      {/* <Animation /> */}
 
       {/* HeaderTwo */}
-      <HeaderTwo />
+      {/* <HeaderTwo /> */}
 
       {/* BreadcrumbOne */}
-      <BreadcrumbOne title='about' theme='us' inner='about us' />
+      {/* <BreadcrumbOne title='about' theme='us' inner='about us' /> */}
 
       {/* AboutInnerOne */}
-      <AboutAreaThree />
+      {/* <AboutAreaThree /> */}
 
       {/* RoadmapInner */}
-      <RoadmapOne />
+      {/* <RoadmapOne /> */}
 
       {/* TestimonialAreaTwo */}
-      <TestimonialAreaTwo />
+      {/* <TestimonialAreaTwo /> */}
 
       {/* FooterOne */}
-      <FooterOne />
+      {/* <FooterOne /> */}
     </>
   );
 };

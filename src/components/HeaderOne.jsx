@@ -9,6 +9,7 @@ import SpectateButton from './SpectateButton'
 import {Login} from './Login'
  import {Signup} from './Signup'
 import {Shope} from './Shope'
+import {play} from './play'
 const HeaderOne = () => {
   const [scroll, setScroll] = useState(false);
   const location = usePathname();
@@ -105,6 +106,7 @@ const HeaderOne = () => {
       <nav
         className={`navbar  main navbar-area navbar-area-1 navbar-border navbar-expand-lg ${scroll ? "sticky-active" : ""
           }`}
+          style={{ backgroundColor: "#070b11" }}
       >
         <div className='container nav-container px-lg-0'>
           <div className='responsive-mobile-menu'>
@@ -454,13 +456,25 @@ const HeaderOne = () => {
             {/* </ul>
           // </div> */} 
           <div>
+
                 <SpectateButton/>
               </div>
+              <div>
               <Shope/>
-        <Login/>
-        </div>
-       
+              </div>
+             <div>
+              <play/>
+             </div>
+           <div>
+           <Login/>
+            </div> 
+            <div>
        <Signup/>
+       </div>
+    
+        </div>
+      
+    
       </nav>
       {/* navbar end */}
       {/* off canvas */}
