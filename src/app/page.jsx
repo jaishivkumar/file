@@ -5,6 +5,7 @@ import CreatorAreaOne from "@/components/CreatorAreaOne";
 import FeatureAreaOne from "@/components/FeatureAreaOne";
 import FooterOne from "@/components/FooterOne";
 import HeaderOne from "@/components/HeaderOne";
+import HomePage from "@/components/HomeCustom";
 import PartnerAreaOne from "@/components/PartnerAreaOne";
 import TestimonialAreaOne from "@/components/TestimonialAreaOne";
 import TopAuctionAreaOne from "@/components/TopAuctionAreaOne";
@@ -25,7 +26,7 @@ const page = () => {
 
       {/* HeaderOne */}
       <HeaderOne />
-
+      <HomePage />
       {/* BannerOne */}
       {/* <BannerOne /> */}
 
