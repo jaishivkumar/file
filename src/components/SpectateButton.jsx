@@ -66,15 +66,19 @@ const SpectateButton = () => {
 
 className="btn btn-dark border border-info text-white d-flex align-items-center gap-2 px-3 py-1 rounded-2"
   style={{
-    backgroundColor: hover ? "#006cd2" : "#000",
-    borderColor: "#0dcaf0",
-    minWidth: "140px",
+    backgroundColor: "#000",
+    border: `2px solid ${hover ? "#0dcaf0" : "#0dcaf0"}`,
+    width: "145px", // Your specified width
+    height: "40px", // From your previous code
     fontWeight: "bold",
     letterSpacing: "1px",
-    boxShadow: "0 0 5px rgba(13, 202, 240, 0.5)",
-    transition: "background-color 0.3s ease",
-    fontSize: "14px",
-    textDecoration: "none", // Removes default underline
+    boxShadow: hover
+      ? "0 0 10px rgba(13, 202, 240, 0.8)"
+      : "0 0 5px rgba(13, 202, 240, 0.5)",
+    transition: "box-shadow 0.3s ease",
+    padding: "0", // Remove padding to fit the small size
+    overflow: "hidden",
+    gap:"8px"  // Removes default underline
   }}
   onMouseEnter={() => setHover(true)}
   onMouseLeave={() => setHover(false)}>

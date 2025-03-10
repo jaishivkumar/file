@@ -1,30 +1,3 @@
-// import React, { useState } from "react";
-// import "bootstrap/dist/css/bootstrap.min.css";
-
-// export const Signup = () => {
-//   const [hover, setHover] = useState(false);
-
-//   return (
-//     <button
-//       type="button"
-//       className="btn btn-dark border border-info text-white px-5 py-2 rounded-3"
-//       style={{
-//         backgroundColor: hover ? "#006cd2" : "#000", // Changes on hover
-//         borderColor: "#0dcaf0",
-//         minWidth: "150px",
-//         fontWeight: "bold",
-//         letterSpacing: "1px",
-//         boxShadow: "0 0 5px rgba(13, 202, 240, 0.5)",
-//         transition: "background-color 0.3s ease", // Smooth transition effect
-//       }}
-//       onMouseEnter={() => setHover(true)}
-//       onMouseLeave={() => setHover(false)}
-//     >
-//       SIGNUP
-//     </button>
-//   );
-// };
-
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -36,13 +9,14 @@ export const Signup = () => {
     password: "",
   });
   const [usernameTaken, setUsernameTaken] = useState(false);
-  const suggestedUsernames = ["mark2407", "markJ007"];
+  const suggestedUsernames = ["@mark2407", "@markJ007"];
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
 
-    if (e.target.name === "username") {
-      setUsernameTaken(e.target.value.toLowerCase() === "mark_j"); // Simulating username taken
+    if (name === "username") {
+      setUsernameTaken(value.toLowerCase() === "mark_j"); // Simulating username taken
     }
   };
 
@@ -59,6 +33,7 @@ export const Signup = () => {
           fontWeight: "bold",
           letterSpacing: "1px",
           boxShadow: "0 0 5px rgba(13, 202, 240, 0.5)",
+          transition: "background-color 0.3s ease",
         }}
         onClick={() => setShowPopup(true)}
       >
@@ -70,21 +45,39 @@ export const Signup = () => {
         <div
           className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
           style={{
-            backgroundColor: "rgba(0, 0, 0, 0.7)", // Dark overlay
-            backdropFilter: "blur(8px)", // Blur effect
-            zIndex: 1050,
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            backdropFilter: "blur(2px)",
+            zIndex: 1050, 
           }}
         >
-          <div className="card p-4 text-white position-relative" style={{ backgroundColor: "#121212", borderRadius: "10px", width: "400px" }}>
-            
+          <div
+            className="card p-4 text-white position-relative"
+            style={{
+              backgroundColor: "#121212",
+              borderRadius: "10px",
+              width: "400px",
+              border: "2px solid #0dcaf0", 
+            }}
+          >
             {/* Close Button (X) */}
             <button
-              className="btn btn-close position-absolute btn-light top-0 end-0 m-2"
+              className="btn-close position-absolute top-0 end-0 m-2"
+              style={{ backgroundColor: "#fff", opacity: "1" }}
               onClick={() => setShowPopup(false)}
             ></button>
 
-            <h4 className="text-center mb-3">Welcome to <span className="text-info">M's TRIBE</span></h4>
-            
+            {/* Welcome Header replaced with Image */}
+            <div className="text-center mb-3">
+              <img
+                src="/assets/fonts/logo.png" 
+                alt="M's TRIBE Logo"
+                style={{
+                  maxWidth: "150px", 
+                  height: "auto",
+                }}
+              />
+            </div>
+
             {/* Username Field */}
             <div className="mb-3">
               <label className="form-label">Username</label>
@@ -95,11 +88,11 @@ export const Signup = () => {
                 placeholder="Enter your username"
                 value={formData.username}
                 onChange={handleChange}
+                style={{ backgroundColor: "#1a1a1a", borderColor: "#333" }}
               />
               {usernameTaken && (
-                <div className="text-danger mt-1">Username already taken</div>
+                <div className="text-danger mt-1">Username already taken <span style={{ color: "#dc3545" }}>✗</span></div>
               )}
-              {/* Suggested Usernames */}
               {usernameTaken && (
                 <div className="mt-2">
                   <small>Use Suggested: </small>
@@ -107,9 +100,10 @@ export const Signup = () => {
                     <button
                       key={name}
                       className="btn btn-sm btn-outline-info mx-1"
-                      onClick={() => setFormData({ ...formData, username: name })}
+                      onClick={() => setFormData({ ...formData, username: name.replace("@", "") })}
+                      style={{ color: "#0dcaf0", borderColor: "#0dcaf0" }}
                     >
-                      @{name}
+                      {name}
                     </button>
                   ))}
                 </div>
@@ -126,6 +120,7 @@ export const Signup = () => {
                 placeholder="mark@gmail.com"
                 value={formData.email}
                 onChange={handleChange}
+                style={{ backgroundColor: "#1a1a1a", borderColor: "#333" }}
               />
             </div>
 
@@ -139,16 +134,31 @@ export const Signup = () => {
                 placeholder="Enter your password"
                 value={formData.password}
                 onChange={handleChange}
+                style={{ backgroundColor: "#1a1a1a", borderColor: "#333" }}
               />
             </div>
 
-            {/* Signup Button */}
-            <button className="btn btn-info w-100">Sign Up</button>
+            {/* Sign Up Button */}
+            <button
+              className="btn w-100 mb-2"
+              style={{
+                backgroundColor: "#0dcaf0",
+                color: "#fff",
+                fontWeight: "bold",
+                borderRadius: "5px",
+              }}
+            >
+                
+              Sign Up
+            </button>
 
-            {/* Signup with Google */}
-            <button className="btn btn-light w-100 mt-2 d-flex align-items-center justify-content-center">
+            {/* Sign up with Google Button */}
+            <button
+              className="btn btn-light w-100 d-flex align-items-center justify-content-center"
+              style={{ borderRadius: "5px" }}
+            >
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+                src="/assets/img/iconImage/g.webp"
                 alt="Google"
                 width="20"
                 height="20"

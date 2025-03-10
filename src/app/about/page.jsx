@@ -1,9 +1,15 @@
-import AboutAreaThree from "@/components/AboutAreaThree";
-import BreadcrumbOne from "@/components/BreadcrumbOne";
+import AboutAreaOne from "@/components/AboutAreaOne";
+import BannerOne from "@/components/BannerOne";
+import BlockChainGalleryAreaOne from "@/components/BlockChainGalleryAreaOne";
+import CreatorAreaOne from "@/components/CreatorAreaOne";
+import FeatureAreaOne from "@/components/FeatureAreaOne";
 import FooterOne from "@/components/FooterOne";
-import HeaderTwo from "@/components/HeaderTwo";
-import RoadmapOne from "@/components/RoadmapOne";
-import TestimonialAreaTwo from "@/components/TestimonialAreaTwo";
+import HeaderOne from "@/components/HeaderOne";
+import HomePage from "@/components/HomeCustom";
+import PartnerAreaOne from "@/components/PartnerAreaOne";
+import TestimonialAreaOne from "@/components/TestimonialAreaOne";
+import TopAuctionAreaOne from "@/components/TopAuctionAreaOne";
+import TopSellerAreaOne from "@/components/TopSellerAreaOne";
 import Animation from "@/helper/Animation";
 
 export const metadata = {
@@ -18,23 +24,39 @@ const page = () => {
       {/* Animation */}
       {/* <Animation /> */}
 
-      {/* HeaderTwo */}
-      {/* <HeaderTwo /> */}
+      {/* HeaderOne */}
+      <HeaderOne />
+      <HomePage />
+      
+      {/* BannerOne */}
+      {/* <BannerOne /> */}
 
-      {/* BreadcrumbOne */}
-      {/* <BreadcrumbOne title='about' theme='us' inner='about us' /> */}
+      {/* FeatureAreaOne */}
+      {/* <FeatureAreaOne /> */}
 
-      {/* AboutInnerOne */}
-      {/* <AboutAreaThree /> */}
+      {/* TopSellerAreaOne */}
+      {/* <TopSellerAreaOne /> */}
 
-      {/* RoadmapInner */}
-      {/* <RoadmapOne /> */}
+      {/* AboutAreaOne */}
+      {/* <AboutAreaOne /> */}
 
-      {/* TestimonialAreaTwo */}
-      {/* <TestimonialAreaTwo /> */}
+      {/* TopAuctionAreaOne */}
+      {/* <TopAuctionAreaOne /> */}
+
+      {/* BlockChainGalleryAreaOne */}
+      {/* <BlockChainGalleryAreaOne /> */}
+
+      {/* CreatorAreaOne */}
+      {/* <CreatorAreaOne /> */}
+
+      {/* TestimonialAreaOne */}
+      {/* <TestimonialAreaOne /> */}
+
+      {/* PartnerAreaOne */}
+      {/* <PartnerAreaOne /> */}
 
       {/* FooterOne */}
-      {/* <FooterOne /> */}
+      <FooterOne />
     </>
   );
 };
