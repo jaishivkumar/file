@@ -14,7 +14,7 @@ export const Login = () => {
         fontWeight: "bold",
         letterSpacing: "1px",
         boxShadow: "0 0 5px rgba(13, 202, 240, 0.5)",
-        transition: "background-color 0.3s ease", // Smooth transition effect
+        transition: "background-color 0.3s ease", 
       }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
