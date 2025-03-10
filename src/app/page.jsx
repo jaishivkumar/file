@@ -55,7 +55,7 @@ const page = () => {
       {/* <PartnerAreaOne /> */}
 
       {/* FooterOne */}
-      <FooterOne />
+      {/* <FooterOne /> */}
     </>
   );
 };

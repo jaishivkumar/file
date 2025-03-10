@@ -10,6 +10,10 @@ import {Login} from './Login'
  import {Signup} from './Signup'
 import {Shope} from './Shope'
 import {PlayButton} from './play'
+ import SucribeButton from './SubcribeButton'
+
+
+
 const HeaderOne = () => {
   const [scroll, setScroll] = useState(false);
   const location = usePathname();
@@ -134,11 +138,10 @@ const HeaderOne = () => {
               <Link href='/'>
                 <img src='assets/fonts/logo.png' alt='img' />
               </Link>
-              <div>
-                <CountdownTimer />
-              </div>
-            
             </div>
+          </div>
+          <div>
+            <SucribeButton/>
           </div>
           {/* <div className='collapse navbar-collapse' id='xdyat_main_menu'>
             <ul className='navbar-nav menu-open ps-xl-5 pe-xl-4 text-end'>
