@@ -1,13 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import "bootstrap/dist/css/bootstrap.min.css";
 
 
-export const play = () => {
+export const PlayButton = () => {
       const [hover, setHover] = useState(false);
   return (
     <button
     type="button"
-    className="btn btn-dark border border-info text-white px-5 py-2 rounded-3"
+    className="btn btn-dark border border-info text-white d-flex align-items-center gap-2 px-3 py-1 rounded-2"
     style={{
       backgroundColor: hover ? "#006cd2" : "#000", // Changes on hover
       borderColor: "#0dcaf0",
@@ -20,7 +20,8 @@ export const play = () => {
     onMouseEnter={() => setHover(true)}
     onMouseLeave={() => setHover(false)}
   >
-    SIGNUP
+     <img src="/assets/img/iconImage/gaming 1.png" alt="icon" width="20" height="20" />
+    PLAY
   </button>
   )
 }

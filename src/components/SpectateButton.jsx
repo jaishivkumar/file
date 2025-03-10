@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Eye, ShoppingBag, Gamepad2 } from "lucide-react"
 import { useState } from 'react';
 
+
 const SpectateButton = () => {
   const [hover, setHover] = useState(false);
   return (
@@ -24,23 +25,70 @@ const SpectateButton = () => {
     //     </button>
     //   </div>
     // </Link>
-    <button
-    type="button"
-    className="btn btn-dark border border-info text-white px-5 py-2 rounded-3"
-    style={{
-      backgroundColor: hover ? "#006cd2" : "#000", // Changes on hover
-      borderColor: "#0dcaf0",
-      minWidth: "150px",
-      fontWeight: "bold",
-      letterSpacing: "1px",
-      boxShadow: "0 0 5px rgba(13, 202, 240, 0.5)",
-      transition: "background-color 0.3s ease", // Smooth transition effect
-    }}
-    onMouseEnter={() => setHover(true)}
-    onMouseLeave={() => setHover(false)}
-  >
-    SPECTATE
-  </button>
+  //   <button
+  //   type="button"
+  //   className="btn btn-dark border border-info text-white px-5 py-2 rounded-3"
+  //   style={{
+  //     backgroundColor: hover ? "#006cd2" : "#000", // Changes on hover
+  //     borderColor: "#0dcaf0",
+  //     minWidth: "150px",
+  //     fontWeight: "bold",
+  //     letterSpacing: "1px",
+  //     boxShadow: "0 0 5px rgba(13, 202, 240, 0.5)",
+  //     transition: "background-color 0.3s ease", // Smooth transition effect
+  //   }}
+  //   onMouseEnter={() => setHover(true)}
+  //   onMouseLeave={() => setHover(false)}
+  // >
+  //   SPECTATE
+  // </button>
+//   <a
+//   href="/service-details" // Navigates to the service details page
+//   className="btn btn-dark border border-info text-white d-flex align-items-center gap-2 px-3 py-1 rounded-2"
+//   style={{
+//     backgroundColor: hover ? "#006cd2" : "#000",
+//     borderColor: "#0dcaf0",
+
+//     minWidth: "140px",
+//     fontWeight: "bold",
+//     letterSpacing: "1px",
+//     boxShadow: "0 0 5px rgba(13, 202, 240, 0.5)",
+//     transition: "background-color 0.3s ease",
+//     fontSize: "14px",
+//     textDecoration: "none", // Removes default underline
+//   }}
+// >
+//   <img src="/assets/img/iconImage/eye 1.png" alt="icon" width="20" height="20" />
+//   SPECTATE
+// </a>
+
+<Link href="/service-details" passHref
+
+className="btn btn-dark border border-info text-white d-flex align-items-center gap-2 px-3 py-1 rounded-2"
+  style={{
+    backgroundColor: hover ? "#006cd2" : "#000",
+    borderColor: "#0dcaf0",
+    minWidth: "140px",
+    fontWeight: "bold",
+    letterSpacing: "1px",
+    boxShadow: "0 0 5px rgba(13, 202, 240, 0.5)",
+    transition: "background-color 0.3s ease",
+    fontSize: "14px",
+    textDecoration: "none", // Removes default underline
+  }}
+  onMouseEnter={() => setHover(true)}
+  onMouseLeave={() => setHover(false)}>
+    
+  <img
+    src="/assets/img/iconImage/eye 1.png"
+    alt="icon"
+    width="20"
+    height="20"
+  />
+  SPECTATE
+{/* </a> */}
+</Link>
+
   );
 };
 
