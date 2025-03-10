@@ -137,7 +137,7 @@ const HeaderOne = () => {
               <div>
                 <CountdownTimer />
               </div>
-
+            
             </div>
           </div>
           {/* <div className='collapse navbar-collapse' id='xdyat_main_menu'>
@@ -454,7 +454,7 @@ const HeaderOne = () => {
                 </Link>
               </li> */}
             {/* </ul>
-          // </div> */}
+          // </div> */} 
           <div>
 
                 <SpectateButton/>
@@ -470,18 +470,18 @@ const HeaderOne = () => {
              </div>
            <div>
            <Login/>
-            </div>
+            </div> 
             <div>
        <Signup/>
        </div>
-
+    
         </div>
-
-
+      
+    
       </nav>
       {/* navbar end */}
       {/* off canvas */}
-
+   
       {/* off canvas end */}
 
       {/* Mobile Menu */}
@@ -515,7 +515,7 @@ const HeaderOne = () => {
           </div>
 
           {/* Navbar Links */}
-          {/* <div
+          <div
             className={`collapse navbar-collapse ${isMobileMenuOpen ? "sopen" : ""
               }`}
             id='xdyat_main_menu'
@@ -899,7 +899,7 @@ const HeaderOne = () => {
                 </Link>
               </li> */}
             </ul>
-          </div> */}
+          </div>
 
           {/* Right Part of Navbar */}
           <div className='nav-right-part nav-right-part-desktop d-lg-inline-flex align-item-center'>

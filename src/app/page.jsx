@@ -6,7 +6,6 @@ import CreatorAreaOne from "@/components/CreatorAreaOne";
 import FeatureAreaOne from "@/components/FeatureAreaOne";
 import FooterOne from "@/components/FooterOne";
 import HeaderOne from "@/components/HeaderOne";
-import HomePage from "@/components/HomeCustom";
 import PartnerAreaOne from "@/components/PartnerAreaOne";
 import TestimonialAreaOne from "@/components/TestimonialAreaOne";
 import TopAuctionAreaOne from "@/components/TopAuctionAreaOne";
@@ -27,11 +26,7 @@ const page = () => {
 
       {/* HeaderOne */}
       <HeaderOne />
-<<<<<<< HEAD
-      <HomePage />
-=======
 <ChatLayout/>
->>>>>>> 0c960713823e4b52828ee08ead2fc9f149df6c26
       {/* BannerOne */}
       {/* <BannerOne /> */}
 
