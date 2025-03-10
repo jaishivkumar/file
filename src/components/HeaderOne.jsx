@@ -9,7 +9,7 @@ import SpectateButton from './SpectateButton'
 import {Login} from './Login'
  import {Signup} from './Signup'
 import {Shope} from './Shope'
-import {play} from './play'
+import {PlayButton} from './play'
 const HeaderOne = () => {
   const [scroll, setScroll] = useState(false);
   const location = usePathname();
@@ -460,6 +460,9 @@ const HeaderOne = () => {
                 <SpectateButton/>
               </div>
               <div>
+                <PlayButton/>
+              </div>
+              <div>
               <Shope/>
               </div>
              <div>
@@ -503,9 +506,12 @@ const HeaderOne = () => {
 
           {/* Logo */}
           <div className='logo'>
-            <Link href='/'>
+            {/* <Link href='/'>
               <img src='assets/img/logo.png' alt='Logo' />
-            </Link>
+            </Link> */}
+             <Link href='/'>
+                <img src='assets/fonts/logo.png' alt='img' />
+              </Link>     
           </div>
 
           {/* Navbar Links */}
@@ -516,8 +522,8 @@ const HeaderOne = () => {
           >
             <ul className='navbar-nav menu-open ps-lg-5 pe-xl-4 text-end '>
               <li
-                className={`menu-item-has-children ${activeMenu === 0 ? "show" : ""
-                  }`}
+                // className={`menu-item-has-children ${activeMenu === 0 ? "show" : ""
+                //   }`}
               >
                 <Link
                   href='#'
@@ -531,9 +537,16 @@ const HeaderOne = () => {
                       : ""
                   }
                 >
-                  Home
+                  <SpectateButton/>
                 </Link>
-                <ul
+                <Link
+                  href='#'
+                 
+                >
+                  <PlayButton/>
+                </Link>
+                
+                {/* <ul
                   className='sub-menu'
                   style={{ display: activeMenu === 0 ? "block" : "none" }}
                 >
@@ -561,7 +574,7 @@ const HeaderOne = () => {
                       Home 03
                     </Link>
                   </li>
-                </ul>
+                </ul> */}
               </li>
 
               <li>
@@ -569,11 +582,26 @@ const HeaderOne = () => {
                   href='/about'
                   className={location === "/about" ? "active" : ""}
                 >
-                  About Us
+                 <Shope/>
                 </Link>
               </li>
-
-              <li
+              <li>
+                <Link
+                  href='/about'
+                  className={location === "/about" ? "active" : ""}
+                >
+                 <Login/>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href='/about'
+                  className={location === "/about" ? "active" : ""}
+                >
+                 <Signup/>
+                </Link>
+              </li>
+              {/* <li
                 className={`menu-item-has-children ${activeMenu === 1 ? "show" : ""
                   }`}
               >
@@ -869,7 +897,7 @@ const HeaderOne = () => {
                 >
                   Contact Us
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div> */}
 
