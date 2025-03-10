@@ -1,6 +1,7 @@
 import AboutAreaOne from "@/components/AboutAreaOne";
 import BannerOne from "@/components/BannerOne";
 import BlockChainGalleryAreaOne from "@/components/BlockChainGalleryAreaOne";
+import ChatLayout from "@/components/ChatLayout";
 import CreatorAreaOne from "@/components/CreatorAreaOne";
 import FeatureAreaOne from "@/components/FeatureAreaOne";
 import FooterOne from "@/components/FooterOne";
@@ -25,7 +26,7 @@ const page = () => {
 
       {/* HeaderOne */}
       <HeaderOne />
-
+<ChatLayout/>
       {/* BannerOne */}
       {/* <BannerOne /> */}
 
