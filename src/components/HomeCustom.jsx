@@ -144,7 +144,7 @@ export default function Home() {
                                 <div className={styles.liveIndicator}>
                                     <div className={styles.liveIcon}>
                                         <Image
-                                            src="/placeholder.svg?height=16&width=16"
+                                            src="/assets/img/live.png?height=16&width=16"
                                             width={16}
                                             height={16}
                                             alt="Live"
@@ -154,7 +154,7 @@ export default function Home() {
                                     </div>
                                     <div className={styles.viewerCount}>
                                         <Image
-                                            src="/placeholder.svg?height=16&width=16"
+                                            src="/assets/img/iconImage/livefeed_3106921.png?height=16&width=16"
                                             width={16}
                                             height={16}
                                             alt="Viewers"
@@ -171,7 +171,7 @@ export default function Home() {
                                 <div className={styles.videoControls}>
                                     <button className={styles.controlButton}>
                                         <Image
-                                            src="/placeholder.svg?height=20&width=20"
+                                            src="/assets/img/iconImage/settings 1.png?height=20&width=20"
                                             width={20}
                                             height={20}
                                             alt="Settings"
@@ -180,7 +180,7 @@ export default function Home() {
                                     </button>
                                     <button className={styles.controlButton}>
                                         <Image
-                                            src="/placeholder.svg?height=20&width=20"
+                                            src="/assets/img/iconImage/preview 1.png?height=20&width=20"
                                             width={20}
                                             height={20}
                                             alt="Fullscreen"
@@ -196,9 +196,9 @@ export default function Home() {
                     <div className={styles.gameSection}>
                         <div className={styles.gameContainer}>
                             <Image
-                                src="/placeholder.svg?height=150&width=1200"
+                                src="/assets/img/gallery/2d.png?height=400&width=1200"
                                 width={1200}
-                                height={150}
+                                height={230}
                                 alt="Game platform"
                                 className={styles.gamePlatform}
                             />
@@ -224,7 +224,7 @@ export default function Home() {
                             <div className={styles.gameSettings}>
                                 <button className={styles.settingsButton}>
                                     <Image
-                                        src="/placeholder.svg?height=20&width=20"
+                                        src="/assets/img/iconImage/settings 1.png?height=20&width=20"
                                         width={20}
                                         height={20}
                                         alt="Settings"
@@ -233,7 +233,7 @@ export default function Home() {
                                 </button>
                                 <button className={styles.fullscreenButton}>
                                     <Image
-                                        src="/placeholder.svg?height=20&width=20"
+                                        src="/assets/img/iconImage/preview 1.png?height=20&width=20"
                                         width={20}
                                         height={20}
                                         alt="Fullscreen"
@@ -257,19 +257,21 @@ export default function Home() {
                 {isChatOpen && (
                     <div className={styles.chatSection}>
                         <div className={styles.chatHeader}>
+                            
                             <div className={styles.worldchat}>
                                 <Image
-                                    src="/placeholder.svg?height=16&width=16"
+                                    src="/assets/img/iconImage/arrow.png?height=16&width=16"
                                     width={16}
                                     height={16}
                                     alt="Chat"
                                     className={styles.icon}
                                 />
+                                
                                 WORLDCHAT
                             </div>
                             <button className={styles.usersButton}>
                                 <Image
-                                    src="/placeholder.svg?height=20&width=20"
+                                    src="/assets/img/iconImage/human.png?height=20&width=20"
                                     width={20}
                                     height={20}
                                     alt="Users"
