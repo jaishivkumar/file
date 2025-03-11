@@ -105,25 +105,22 @@ export default function Home() {
                                 /> */}
 
 
-                                <div className={styles.videoOverlay}>
+                                {/* <div className={styles.videoOverlay}> */}
 
                                 {/* <video className={styles.videoPlayer} autoPlay muted> */}
                                 <video className={styles.videoPlayer} controls autoPlay muted loop playsInline>
                                     <source src="/assets/videos/video1.mp4" type="video/mp4" />
                                     Your browser does not support the video tag.
                                 </video>
+                                {/* </div> */}
 
-
-
-                                </div>
-
-                                <div className={styles.videoContainer}>
+                                {/* <div className={styles.videoContainer}>
                                     <p className={styles.liveTag}>Live</p>
                                     <video className={styles.videoPlayer} controls autoPlay muted>
                                         <source src="/public/videos/video1.mp4" type="video/mp4" />
                                         Your browser does not support the video tag.
                                     </video>
-                                </div>
+                                </div> */}
 
                                 <div className={styles.mainCam}>
                                     <div className={styles.camIcon}>
@@ -257,17 +254,22 @@ export default function Home() {
                 {isChatOpen && (
                     <div className={styles.chatSection}>
                         <div className={styles.chatHeader}>
-                            
+
+
+{/*  this is for the upper close and open button  */}
                             <div className={styles.worldchat}>
-                                <Image
-                                    src="/assets/img/iconImage/arrow.png?height=16&width=16"
-                                    width={16}
-                                    height={16}
-                                    alt="Chat"
-                                    className={styles.icon}
-                                />
-                                
-                                WORLDCHAT
+                                <button onClick={toggleChat} className="btn" >
+                                    <Image
+                                        src="/assets/img/iconImage/arrow.png?height=16&width=16"
+                                        width={16}
+                                        height={16}
+                                        alt="Chat"
+                                        className={styles.icon}
+                                    />
+
+                                    WORLDCHAT
+                                </button>
+
                             </div>
                             <button className={styles.usersButton}>
                                 <Image
