@@ -11,7 +11,7 @@ import {Login} from './Login'
 import {Shope} from './Shope'
 import {PlayButton} from './play'
  import SucribeButton from './SubcribeButton'
-
+import Profile from "./profile";
 
 
 const HeaderOne = () => {
@@ -472,7 +472,9 @@ const HeaderOne = () => {
               <play/>
              </div>
            <div>
+         
            <Login/>
+           {/* <Profile/> */}
             </div> 
             <div>
        <Signup/>
