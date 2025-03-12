@@ -457,7 +457,7 @@ const HeaderOne = () => {
                 </Link>
               </li> */}
             {/* </ul>
-          // </div> */} 
+          // </div> */}
           <div>
 
                 <SpectateButton/>
@@ -472,21 +472,21 @@ const HeaderOne = () => {
               <play/>
              </div>
            <div>
-         
+
            <Login/>
            {/* <Profile/> */}
-            </div> 
+            </div>
             <div>
        <Signup/>
        </div>
-    
+
         </div>
-      
-    
+
+
       </nav>
       {/* navbar end */}
       {/* off canvas */}
-   
+
       {/* off canvas end */}
 
       {/* Mobile Menu */}
@@ -516,7 +516,7 @@ const HeaderOne = () => {
             </Link> */}
              <Link href='/'>
                 <img src='assets/fonts/logo.png' alt='img' />
-              </Link>     
+              </Link>
           </div>
 
           {/* Navbar Links */}
@@ -546,11 +546,11 @@ const HeaderOne = () => {
                 </Link>
                 <Link
                   href='#'
-                 
+
                 >
                   <PlayButton/>
                 </Link>
-                
+
                 {/* <ul
                   className='sub-menu'
                   style={{ display: activeMenu === 0 ? "block" : "none" }}

@@ -29,7 +29,7 @@ export const Signup = () => {
       alert("Please choose a different username");
       return;
     }
-  
+
     try {
       const response = await fetch('http://localhost:5000/api/register', { // Adjust URL to your backend endpoint
         method: 'POST',
@@ -38,13 +38,13 @@ export const Signup = () => {
         },
         body: JSON.stringify(formData),
       });
-  
+
       const data = await response.json();
       if (response.ok) {
         alert("Registration successful!");
         setShowPopup(false);
         // Redirect to Chat Page
-    
+
         setFormData({
           username: "",
           email: "",

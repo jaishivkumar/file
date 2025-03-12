@@ -13,70 +13,6 @@ export default function Home() {
 
     return (
         <div className={styles.container}>
-            {/* Navigation Bar */}
-            {/* <nav className={styles.navbar}>
-                <div className={styles.navLeft}>
-                    <div className={styles.logo}>
-                        <span className={styles.logoM}>M</span>
-                        <span className={styles.logoText}>&apos;s TRIBE</span>
-                    </div>
-                    <div className={styles.countdown}>
-                        <div className={styles.countdownNumber}>1</div>
-                        <div className={styles.countdownNumber}>4</div>
-                        <div className={styles.countdownNumber}>1</div>
-                        <div className={styles.countdownNumber}>2</div>
-                        <div className={styles.countdownText}>DAYS LEFT</div>
-                    </div>
-                </div>
-
-                <div className={styles.navCenter}>
-                    <button className={`${styles.navButton} ${styles.spectateBtn}`}>
-                        <Image
-                            src="/placeholder.svg?height=20&width=20"
-                            width={20}
-                            height={20}
-                            alt="Eye icon"
-                            className={styles.btnIcon}
-                        />
-                        SPECTATE
-                    </button>
-                    <button className={`${styles.navButton} ${styles.shopBtn}`}>
-                        <Image
-                            src="/placeholder.svg?height=20&width=20"
-                            width={20}
-                            height={20}
-                            alt="Shop icon"
-                            className={styles.btnIcon}
-                        />
-                        SHOP
-                    </button>
-                    <button className={`${styles.navButton} ${styles.playBtn}`}>
-                        <Image
-                            src="/placeholder.svg?height=20&width=20"
-                            width={20}
-                            height={20}
-                            alt="Play icon"
-                            className={styles.btnIcon}
-                        />
-                        PLAY
-                    </button>
-                </div>
-
-                <div className={styles.navRight}>
-                    <div className={styles.currency}>
-                        <Image
-                            src="/placeholder.svg?height=30&width=30"
-                            width={30}
-                            height={30}
-                            alt="Currency icon"
-                            className={styles.currencyIcon}
-                        />
-                        <span className={styles.currencyAmount}>1,025,560</span>
-                    </div>
-                    <button className={`${styles.navButton} ${styles.loginBtn}`}>LOGIN</button>
-                    <button className={`${styles.navButton} ${styles.signupBtn}`}>SIGN UP</button>
-                </div>
-            </nav> */}
 
             {/* Main Content Wrapper */}
             <div className={styles.contentWrapper}>
@@ -87,26 +23,6 @@ export default function Home() {
                         {/* Video Section */}
                         <div className={styles.videoSection}>
                             <div className={styles.videoContainer}>
-
-                                {/* <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-9E5tCHpUD7jOBgsygHItTE3nNkiA6W.png"
-                  alt="Cyberpunk city street"
-                  fill
-                  className={styles.videoBackground}
-                  style={{ objectFit: "cover" }}
-                /> */}
-
-                                {/* <Image
-                                    src="/public/assets/img/login.png"
-                                    alt="Cyberpunk city street"
-                                    fill
-                                    className={styles.videoBackground}
-                                    style={{ objectFit: "cover" }}
-                                /> */}
-
-
-                                {/* <div className={styles.videoOverlay}> */}
-
                                 {/* <video className={styles.videoPlayer} autoPlay muted> */}
                                 <video className={styles.videoPlayer} controls autoPlay muted loop playsInline>
                                     <source src="/assets/videos/video1.mp4" type="video/mp4" />

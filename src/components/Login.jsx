@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 export const Login = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [formData, setFormData] = useState({
@@ -45,7 +45,7 @@ export const Login = () => {
         router.push("/signup"); // ✅ Redirect after successful login
       }
       setShowPopup(false);
-     
+
     } catch (err) {
       setError(err.message);
     } finally {
