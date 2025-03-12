@@ -1,4 +1,5 @@
 // File: SubscribeButton.jsx (renamed)
+"use client";
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -6,7 +7,7 @@ const SubscribeButton = () => {
   const [hover, setHover] = useState(false);
   return (
     <Link
-      href="/service-details"
+      href="/subscribe"
       passHref
       className="btn btn-dark border border-info text-white d-flex align-items-center gap-2 px-3 py-1 rounded-2"
       style={{
