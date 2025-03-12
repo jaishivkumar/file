@@ -1,6 +1,9 @@
+'use client'
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useRouter } from "next/navigation";
+import ForgotPasswordModal from '@/components/forgetpassword'
+
 export const Login = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [formData, setFormData] = useState({
@@ -8,6 +11,7 @@ export const Login = () => {
     password: "",
   });
   const [hover, setHover] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter()
@@ -201,24 +205,42 @@ export const Login = () => {
                   Remember for 30 days
                 </label>
               </div>
-              <a href="/forgot-password" className="text-info" style={{ cursor: "pointer" }}>
-                Forgot password
-              </a>
+              <div className="text-center">
+                <a
+                  onClick={() => {
+                    setShowPopup(false)
+                    setShowForgotPassword(true)
+                  }}
+                  className="text-info"
+                  style={{ cursor: "pointer" }}
+                >
+                  Forgot password?
+                </a>
+              </div>
             </div>
 
             {/* Sign Up Link */}
             <div className="text-center">
-              <small>
-                Don't have an account?{" "}
-                <a href="/signup" className="text-info" style={{ cursor: "pointer" }}>
+            <small>
+                  Don't have an account?{" "}
+                  {/* <a href="/signup" className="text-info" style={{ cursor: "pointer" }}> */}
+                  {/* </a> */}
+                </small>
+              <button className="btn" onClick={() => setShowPopup(true)}              >
+
+                  {/* <a href="/signup" className="text-info" style={{ cursor: "pointer" }}> */}
                   Sign up
-                </a>
-              </small>
+                  {/* </a> */}
+
+              </button>
+
             </div>
           </div>
         </div>
       )}
+       <ForgotPasswordModal show={showForgotPassword} handleClose={() => setShowForgotPassword(false)} />
     </>
+
   );
 };
 

@@ -158,7 +158,7 @@
   /* Content Wrapper - Contains both main content and chat */
   .contentWrapper {
     display: flex;
-    flex: 1;
+    flex: 1;  
     position: relative;
   }
 
