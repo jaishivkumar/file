@@ -11,7 +11,7 @@ import HeaderOne from "@/components/HeaderOne";
 // import TopAuctionAreaOne from "@/components/TopAuctionAreaOne";
 // import TopSellerAreaOne from "@/components/TopSellerAreaOne";
 // import Animation from "@/helper/Animation";
- import HomeCustom from "@/components/HomeCustom"
+import HomeCustom from "@/components/HomeCustom"
 export const metadata = {
   title: "DYAT - eSports and Gaming NFT NEXT JS Template",
   description:
@@ -23,11 +23,12 @@ const page = () => {
     <>
       {/* Animation */}
       {/* <Animation /> */}
-
       {/* HeaderOne */}
-      <HeaderOne />
-{/* <ChatLayout/> */}
- <HomeCustom/>
+
+      {/* <HeaderOne /> */}
+
+      {/* <ChatLayout/> */}
+      <HomeCustom />
       {/* BannerOne */}
       {/* <BannerOne /> */}
 

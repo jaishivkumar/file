@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { Container, Row, Col, Button, Badge } from "react-bootstrap"
 import HeaderOne from "@/components/HeaderOne"
 import "bootstrap/dist/css/bootstrap.min.css"
-
 export default function SubscriptionPage() {
   const [isAnnual, setIsAnnual] = useState(true)
   const [recentSubscribers, setRecentSubscribers] = useState([
@@ -12,14 +11,12 @@ export default function SubscriptionPage() {
     { name: "Sarah", time: "just" },
   ])
   const [currentSubscriber, setCurrentSubscriber] = useState(0)
-
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSubscriber((prev) => (prev + 1) % recentSubscribers.length)
     }, 5000)
     return () => clearInterval(interval)
   }, [recentSubscribers.length])
-
   return (
     <div
       className="text-center text-white"
@@ -30,18 +27,14 @@ export default function SubscriptionPage() {
       }}
     >
       <Container>
-        <HeaderOne />
-
         <h1 className="fw-bold mb-3 display-4">
           Subscriber <span className="text-info">Exclusive</span>
         </h1>
-
         <p className="text-secondary mb-5 mx-auto" style={{ maxWidth: "800px", fontSize: "0.9rem", lineHeight: "1.5" }}>
           Take your gaming experience to the next level! With our PRO plan, you unlock exclusive skins, faster
           evolution, and access to restricted areas that only premium players can explore. Don't settle for
           limitations—upgrade now and dominate the game like never before!
         </p>
-
         {/* Toggle Buttons */}
         <div className="position-relative d-inline-block mb-5">
           <div
