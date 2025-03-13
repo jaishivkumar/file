@@ -244,7 +244,7 @@ export default function AuthHeaderButtons() {
             }}
           >
 
-            
+
             {/* Settings Icon - Now as a link to settings page */}
             <a
               href="/setting"
