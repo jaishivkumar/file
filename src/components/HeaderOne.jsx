@@ -7,7 +7,7 @@ import SpectateButton from "./SpectateButton";
 //  import Shope from './Shope'
 import { Login } from "./Login";
 import { Signup } from "./Signup";
-import { Shope } from "./Shope";
+import { Shope } from "../components/cloths/Shope";
 import { PlayButton } from "./play";
 import SucribeButton from "./SubcribeButton";
 import Profile from "./profile";
@@ -513,15 +513,6 @@ const HeaderOne = () => {
               >
                 <Link
                   href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSubMenuToggle(0);
-                  }}
-                  className={
-                    ["/", "/index-2", "/index-3"].includes(location)
-                      ? "active"
-                      : ""
-                  }
                 >
                   <SpectateButton />
                 </Link>

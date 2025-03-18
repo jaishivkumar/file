@@ -50,6 +50,7 @@ export default function AuthHeaderButtons() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include',
         body: JSON.stringify(loginFormData),
       })
 

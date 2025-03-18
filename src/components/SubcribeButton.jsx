@@ -29,7 +29,7 @@ const SubscribeButton = () => {
       onMouseLeave={() => setHover(false)}
     >
       <img
-        src="assets/img/iconImage/sub.png.png"
+        src="/assets/img/iconImage/fi_3180028.png"
         alt="icon"
         width="20"
         height="20"

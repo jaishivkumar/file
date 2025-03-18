@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import { Container, Row, Col, Button, Badge } from "react-bootstrap"
 import HeaderOne from "@/components/HeaderOne"
 import "bootstrap/dist/css/bootstrap.min.css"
+
+
 export default function SubscriptionPage() {
   const [isAnnual, setIsAnnual] = useState(true)
   const [recentSubscribers, setRecentSubscribers] = useState([
@@ -24,6 +26,7 @@ export default function SubscriptionPage() {
         background: "linear-gradient(180deg, #0b0f19 0%, #0a1a2e 100%)",
         minHeight: "100vh",
         padding: "30px 0",
+        width:"100%",
       }}
     >
       <Container>

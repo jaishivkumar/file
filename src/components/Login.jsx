@@ -110,7 +110,6 @@ export const Login = () => {
               style={{ backgroundColor: "#fff", opacity: "1" }}
               onClick={() => setShowPopup(false)}
             ></button>
-
             {/* Welcome Header */}
             <div className="text-center mb-3">
               <img
