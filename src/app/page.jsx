@@ -1,16 +1,6 @@
-// import AboutAreaOne from "@/components/AboutAreaOne";
-// import BannerOne from "@/components/BannerOne";
-// import BlockChainGalleryAreaOne from "@/components/BlockChainGalleryAreaOne";
-// import ChatLayout from "@/components/ChatLayout";
-// import CreatorAreaOne from "@/components/CreatorAreaOne";
-// import FeatureAreaOne from "@/components/FeatureAreaOne";
-// import FooterOne from "@/components/FooterOne";
+
 import HeaderOne from "@/components/HeaderOne";
-// import PartnerAreaOne from "@/components/PartnerAreaOne";
-// import TestimonialAreaOne from "@/components/TestimonialAreaOne";
-// import TopAuctionAreaOne from "@/components/TopAuctionAreaOne";
-// import TopSellerAreaOne from "@/components/TopSellerAreaOne";
-// import Animation from "@/helper/Animation";
+
  import HomeCustom from "@/components/HomeCustom"
 export const metadata = {
   title: "DYAT - eSports and Gaming NFT NEXT JS Template",
@@ -21,42 +11,8 @@ export const metadata = {
 const page = () => {
   return (
     <>
-      {/* Animation */}
-      {/* <Animation /> */}
-
-      {/* HeaderOne */}
-      <HeaderOne />
-{/* <ChatLayout/> */}
  <HomeCustom/>
-      {/* BannerOne */}
-      {/* <BannerOne /> */}
-
-      {/* FeatureAreaOne */}
-      {/* <FeatureAreaOne /> */}
-
-      {/* TopSellerAreaOne */}
-      {/* <TopSellerAreaOne /> */}
-
-      {/* AboutAreaOne */}
-      {/* <AboutAreaOne /> */}
-
-      {/* TopAuctionAreaOne */}
-      {/* <TopAuctionAreaOne /> */}
-
-      {/* BlockChainGalleryAreaOne */}
-      {/* <BlockChainGalleryAreaOne /> */}
-
-      {/* CreatorAreaOne */}
-      {/* <CreatorAreaOne /> */}
-
-      {/* TestimonialAreaOne */}
-      {/* <TestimonialAreaOne /> */}
-
-      {/* PartnerAreaOne */}
-      {/* <PartnerAreaOne /> */}
-
-      {/* FooterOne */}
-      {/* <FooterOne /> */}
+    
     </>
   );
 };

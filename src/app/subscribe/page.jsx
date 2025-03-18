@@ -5,6 +5,7 @@ import { Container, Row, Col, Button, Badge } from "react-bootstrap"
 import HeaderOne from "@/components/HeaderOne"
 import "bootstrap/dist/css/bootstrap.min.css"
 
+
 export default function SubscriptionPage() {
   const [isAnnual, setIsAnnual] = useState(true)
   const [recentSubscribers, setRecentSubscribers] = useState([
@@ -27,15 +28,13 @@ export default function SubscriptionPage() {
         background: "linear-gradient(180deg, #0b0f19 0%, #0a1a2e 100%)",
         minHeight: "100vh",
         padding: "30px 0",
+        width:"100%",
       }}
     >
       <Container>
-        <HeaderOne />
-
         <h1 className="fw-bold mb-3 display-4">
           Subscriber <span className="text-info">Exclusive</span>
         </h1>
-
         <p className="text-secondary mb-5 mx-auto" style={{ maxWidth: "800px", fontSize: "0.9rem", lineHeight: "1.5" }}>
           Take your gaming experience to the next level! With our PRO plan, you unlock exclusive skins, faster
           evolution, and access to restricted areas that only premium players can explore. Don't settle for

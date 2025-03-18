@@ -9,10 +9,11 @@ import NotificationsSection from "@/components/settings/NotificationsSection"
 import ManageFundsSection from "@/components/settings/ManageFundsSection"
 import ProfileSection from "@/components/settings/ProfileSection"
 import TribezPrimeSection from "@/components/settings/TribezPrimeSection"
+import { useRouter } from 'next/navigation';
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("security")
-
+  const router = useRouter();
   const renderActiveSection = () => {
     switch (activeTab) {
       case "profile":
@@ -23,8 +24,9 @@ export default function SettingsPage() {
         return <SecuritySection />
       case "notifications":
         return <NotificationsSection />
-      case "funds":
-        return <ManageFundsSection />
+        case "funds":
+          router.push('/managefund'); // Redirect to /funds
+          return null; // No component rendered here
       default:
         return <SecuritySection />
     }
@@ -32,12 +34,9 @@ export default function SettingsPage() {
 
   return (
     <div className="vh-100 vw-100 d-flex flex-column text-white" style={{ backgroundColor: "#071328" }}>
-      <HeaderOne />
       <div className="flex-grow-1 p-5 settings-container">
         <h2 className="text-white mb-4">Settings</h2>
-
         <SettingsTabs activeTab={activeTab} onTabChange={setActiveTab} />
-
         {renderActiveSection()}
       </div>
     </div>

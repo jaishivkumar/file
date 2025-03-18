@@ -1,530 +1,233 @@
 "use client"
 
 import Image from "next/image"
-import styles from "../custonCss/home.module.css"
 import { useState } from "react"
+import styles from "../viewscreen/screen.module.css"
 
 export default function Home() {
-    const [isChatOpen, setIsChatOpen] = useState(true)
+  const [isChatOpen, setIsChatOpen] = useState(true)
+  const [viewMode, setViewMode] = useState("single")
+  const [selectedCamera, setSelectedCamera] = useState(1) // Set to main camera ID initially
 
-    const toggleChat = () => {
-        setIsChatOpen(!isChatOpen)
-    }
+  // Define cameras that will be shown in multi-view (excluding main camera initially)
+  const otherCameras = [
+    { id: 2, name: "Shopping Mall", src: "/assets/videos/video1.mp4" },
+    { id: 3, name: "Office", src: "/assets/videos/office.png" },
+    { id: 4, name: "Orchestra", src: "/assets/videos/orchestra.png" },
+  ]
+
+  // Main camera that starts in single view
+  const mainCamera = {
+    id: 1,
+    name: "Street Cam",
+    src: "/assets/videos/videoplayback.mp4",
+  }
+
+  const toggleViewMode = () => {
+    setViewMode(viewMode === "single" ? "multi" : "single")
+  }
+
+  const expandCamera = (camera) => {
+    setSelectedCamera(camera.id)
+    setViewMode("single")
+  }
+
+
+  // Get current camera for single view
+  const getCurrentCamera = () => {
+    if (selectedCamera === mainCamera.id) return mainCamera
+    return otherCameras.find((cam) => cam.id === selectedCamera) || mainCamera
+  }
+
+  const renderCameraView = (camera, isMain = false) => {
+    // Determine if we should render an image or video based on the file extension
+    const isImage = camera.src.endsWith(".png") || camera.src.endsWith(".jpg") || camera.src.endsWith(".jpeg")
 
     return (
-        <div className={styles.container}>
-            {/* Navigation Bar */}
-            {/* <nav className={styles.navbar}>
-                <div className={styles.navLeft}>
-                    <div className={styles.logo}>
-                        <span className={styles.logoM}>M</span>
-                        <span className={styles.logoText}>&apos;s TRIBE</span>
-                    </div>
-                    <div className={styles.countdown}>
-                        <div className={styles.countdownNumber}>1</div>
-                        <div className={styles.countdownNumber}>4</div>
-                        <div className={styles.countdownNumber}>1</div>
-                        <div className={styles.countdownNumber}>2</div>
-                        <div className={styles.countdownText}>DAYS LEFT</div>
-                    </div>
-                </div>
-
-                <div className={styles.navCenter}>
-                    <button className={`${styles.navButton} ${styles.spectateBtn}`}>
-                        <Image
-                            src="/placeholder.svg?height=20&width=20"
-                            width={20}
-                            height={20}
-                            alt="Eye icon"
-                            className={styles.btnIcon}
-                        />
-                        SPECTATE
-                    </button>
-                    <button className={`${styles.navButton} ${styles.shopBtn}`}>
-                        <Image
-                            src="/placeholder.svg?height=20&width=20"
-                            width={20}
-                            height={20}
-                            alt="Shop icon"
-                            className={styles.btnIcon}
-                        />
-                        SHOP
-                    </button>
-                    <button className={`${styles.navButton} ${styles.playBtn}`}>
-                        <Image
-                            src="/placeholder.svg?height=20&width=20"
-                            width={20}
-                            height={20}
-                            alt="Play icon"
-                            className={styles.btnIcon}
-                        />
-                        PLAY
-                    </button>
-                </div>
-
-                <div className={styles.navRight}>
-                    <div className={styles.currency}>
-                        <Image
-                            src="/placeholder.svg?height=30&width=30"
-                            width={30}
-                            height={30}
-                            alt="Currency icon"
-                            className={styles.currencyIcon}
-                        />
-                        <span className={styles.currencyAmount}>1,025,560</span>
-                    </div>
-                    <button className={`${styles.navButton} ${styles.loginBtn}`}>LOGIN</button>
-                    <button className={`${styles.navButton} ${styles.signupBtn}`}>SIGN UP</button>
-                </div>
-            </nav> */}
-
-            {/* Main Content Wrapper */}
-            <div className={styles.contentWrapper}>
-                {/* Main Content and Game Section */}
-                <div className={`${styles.mainAndGameWrapper} ${!isChatOpen ? styles.fullWidth : ""}`}>
-                    {/* Main Content */}
-                    <div className={styles.mainContent}>
-                        {/* Video Section */}
-                        <div className={styles.videoSection}>
-                            <div className={styles.videoContainer}>
-
-                                {/* <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-9E5tCHpUD7jOBgsygHItTE3nNkiA6W.png"
-                  alt="Cyberpunk city street"
-                  fill
-                  className={styles.videoBackground}
-                  style={{ objectFit: "cover" }}
-                /> */}
-
-                                {/* <Image
-                                    src="/public/assets/img/login.png"
-                                    alt="Cyberpunk city street"
-                                    fill
-                                    className={styles.videoBackground}
-                                    style={{ objectFit: "cover" }}
-                                /> */}
-
-
-                                {/* <div className={styles.videoOverlay}> */}
-
-                                {/* <video className={styles.videoPlayer} autoPlay muted> */}
-                                <video className={styles.videoPlayer} controls autoPlay muted loop playsInline>
-                                    <source src="/assets/videos/video1.mp4" type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                </video>
-                                {/* </div> */}
-
-                                {/* <div className={styles.videoContainer}>
-                                    <p className={styles.liveTag}>Live</p>
-                                    <video className={styles.videoPlayer} controls autoPlay muted>
-                                        <source src="/public/videos/video1.mp4" type="video/mp4" />
-                                        Your browser does not support the video tag.
-                                    </video>
-                                </div> */}
-
-                                <div className={styles.mainCam}>
-                                    <div className={styles.camIcon}>
-                                        <Image
-                                            src="/placeholder.svg?height=24&width=24"
-                                            width={24}
-                                            height={24}
-                                            alt="Camera"
-                                            className={styles.icon}
-                                        />
-                                    </div>
-                                    <div className={styles.camText}>
-                                        <div>Main Cam</div>
-                                        <div className={styles.changeView}>Change View</div>
-                                    </div>
-                                </div>
-
-                                <div className={styles.liveIndicator}>
-                                    <div className={styles.liveIcon}>
-                                        <Image
-                                            src="/assets/img/live.png?height=16&width=16"
-                                            width={16}
-                                            height={16}
-                                            alt="Live"
-                                            className={styles.icon}
-                                        />
-                                        LIVE
-                                    </div>
-                                    <div className={styles.viewerCount}>
-                                        <Image
-                                            src="/assets/img/iconImage/livefeed_3106921.png?height=16&width=16"
-                                            width={16}
-                                            height={16}
-                                            alt="Viewers"
-                                            className={styles.icon}
-                                        />
-                                        342
-                                    </div>
-                                </div>
-
-                                <div className={styles.infoBox}>
-                                    <p>Did you know that there are Segways you can ride in Starlight Plaza?</p>
-                                </div>
-
-                                <div className={styles.videoControls}>
-                                    <button className={styles.controlButton}>
-                                        <Image
-                                            src="/assets/img/iconImage/settings 1.png?height=20&width=20"
-                                            width={20}
-                                            height={20}
-                                            alt="Settings"
-                                            className={styles.icon}
-                                        />
-                                    </button>
-                                    <button className={styles.controlButton}>
-                                        <Image
-                                            src="/assets/img/iconImage/preview 1.png?height=20&width=20"
-                                            width={20}
-                                            height={20}
-                                            alt="Fullscreen"
-                                            className={styles.icon}
-                                        />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Bottom Game Section */}
-                    <div className={styles.gameSection}>
-                        <div className={styles.gameContainer}>
-                            <Image
-                                src="/assets/img/gallery/2d.png?height=400&width=1200"
-                                width={1200}
-                                height={230}
-                                alt="Game platform"
-                                className={styles.gamePlatform}
-                            />
-                            <div className={styles.gameControls}>
-                                <div className={styles.controlsLeft}>
-                                    <div className={styles.controlsGrid}>
-                                        <button className={styles.controlKey}>W</button>
-                                        <button className={styles.controlKey}>A</button>
-                                        <button className={styles.controlKey}>S</button>
-                                        <button className={styles.controlKey}>D</button>
-                                    </div>
-                                    <div className={styles.controlLabel}>Move</div>
-                                </div>
-                                <div className={styles.controlsRight}>
-                                    <button className={styles.spaceKey}>SPACE</button>
-                                    <div className={styles.controlLabel}>
-                                        Jump and
-                                        <br />
-                                        Double Jump
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={styles.gameSettings}>
-                                <button className={styles.settingsButton}>
-                                    <Image
-                                        src="/assets/img/iconImage/settings 1.png?height=20&width=20"
-                                        width={20}
-                                        height={20}
-                                        alt="Settings"
-                                        className={styles.icon}
-                                    />
-                                </button>
-                                <button className={styles.fullscreenButton}>
-                                    <Image
-                                        src="/assets/img/iconImage/preview 1.png?height=20&width=20"
-                                        width={20}
-                                        height={20}
-                                        alt="Fullscreen"
-                                        className={styles.icon}
-                                    />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Chat Toggle Button */}
-                <button
-                    className={`${styles.chatToggleBtn} ${!isChatOpen ? styles.chatToggleBtnClosed : ""}`}
-                    onClick={toggleChat}
-                >
-                    {isChatOpen ? "»" : "«"}
-                </button>
-
-                {/* Chat Section */}
-                {isChatOpen && (
-                    <div className={styles.chatSection}>
-                        <div className={styles.chatHeader}>
-
-
-{/*  this is for the upper close and open button  */}
-                            <div className={styles.worldchat}>
-                                <button onClick={toggleChat} className="btn" >
-                                    <Image
-                                        src="/assets/img/iconImage/arrow.png?height=16&width=16"
-                                        width={16}
-                                        height={16}
-                                        alt="Chat"
-                                        className={styles.icon}
-                                    />
-
-                                    WORLDCHAT
-                                </button>
-
-                            </div>
-                            <button className={styles.usersButton}>
-                                <Image
-                                    src="/assets/img/iconImage/human.png?height=20&width=20"
-                                    width={20}
-                                    height={20}
-                                    alt="Users"
-                                    className={styles.icon}
-                                />
-                            </button>
-                        </div>
-
-                        <div className={styles.chatMessages}>
-                            <div className={styles.chatMessage}>
-                                <p className={styles.messageText}>
-                                    &quot;There&apos;s a really strange man looking at me here. Anyone knows where I can buy pedo
-                                    repellent?...&quot;
-                                </p>
-                                <div className={styles.messageUser}>
-                                    <div className={styles.userAvatar}>
-                                        <Image
-                                            src="/placeholder.svg?height=30&width=30"
-                                            width={30}
-                                            height={30}
-                                            alt="User avatar"
-                                            className={styles.avatar}
-                                        />
-                                    </div>
-                                    <div className={styles.userInfo}>
-                                        <div className={styles.userName}>JAMES5423</div>
-                                        <div className={styles.userLocation}>Your Mom's Apartment</div>
-                                    </div>
-                                    <button className={styles.shareButton}>
-                                        <Image
-                                            src="/placeholder.svg?height=16&width=16"
-                                            width={16}
-                                            height={16}
-                                            alt="Share"
-                                            className={styles.icon}
-                                        />
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className={styles.systemMessage}>Jenifer found the Red line stop!</div>
-
-                            <div className={styles.chatMessage}>
-                                <p className={styles.messageText}>&quot;I can&apos;t find how to go forward&quot;</p>
-                                <div className={styles.messageUser}>
-                                    <div className={styles.userAvatar}>
-                                        <Image
-                                            src="/placeholder.svg?height=30&width=30"
-                                            width={30}
-                                            height={30}
-                                            alt="User avatar"
-                                            className={styles.avatar}
-                                        />
-                                    </div>
-                                    <div className={styles.userInfo}>
-                                        <div className={styles.userName}>SARAHx420</div>
-                                        <div className={styles.userLocation}>Woman's Gym</div>
-                                    </div>
-                                    <button className={styles.shareButton}>
-                                        <Image
-                                            src="/placeholder.svg?height=16&width=16"
-                                            width={16}
-                                            height={16}
-                                            alt="Share"
-                                            className={styles.icon}
-                                        />
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className={styles.tagMessage}>
-                                <span className={styles.tagUser}>rage</span>
-                                <Image
-                                    src="/placeholder.svg?height=16&width=16"
-                                    width={16}
-                                    height={16}
-                                    alt="Gun"
-                                    className={styles.icon}
-                                />
-                                <span className={styles.tagTarget}>The Major</span>
-                            </div>
-
-                            <div className={styles.chatMessage}>
-                                <p className={styles.messageText}>&quot;Anyone want to trade?&quot;</p>
-                                <div className={styles.messageUser}>
-                                    <div className={styles.userAvatar}>
-                                        <Image
-                                            src="/placeholder.svg?height=30&width=30"
-                                            width={30}
-                                            height={30}
-                                            alt="User avatar"
-                                            className={styles.avatar}
-                                        />
-                                    </div>
-                                    <div className={styles.userInfo}>
-                                        <div className={styles.userName}>PARZIVAL</div>
-                                        <div className={styles.userLocation}>Youth Hostel</div>
-                                    </div>
-                                    <button className={styles.shareButton}>
-                                        <Image
-                                            src="/placeholder.svg?height=16&width=16"
-                                            width={16}
-                                            height={16}
-                                            alt="Share"
-                                            className={styles.icon}
-                                        />
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className={styles.chatMessage}>
-                                <p className={styles.messageText}>&quot;Yesss! @Parzival&quot;</p>
-                                <div className={styles.messageUser}>
-                                    <div className={styles.userAvatar}>
-                                        <Image
-                                            src="/placeholder.svg?height=30&width=30"
-                                            width={30}
-                                            height={30}
-                                            alt="User avatar"
-                                            className={styles.avatar}
-                                        />
-                                    </div>
-                                    <div className={styles.userInfo}>
-                                        <div className={styles.userName}>ART3MIS</div>
-                                        <div className={styles.userLocation}>Coffee Shop</div>
-                                    </div>
-                                    <button className={styles.shareButton}>
-                                        <Image
-                                            src="/placeholder.svg?height=16&width=16"
-                                            width={16}
-                                            height={16}
-                                            alt="Share"
-                                            className={styles.icon}
-                                        />
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className={styles.systemMessage}>Parzival won 432 $VBT</div>
-
-                            <div className={styles.chatMessage}>
-                                <p className={styles.messageText}>&quot;Great Deal, guys&quot;</p>
-                                <div className={styles.messageUser}>
-                                    <div className={styles.userAvatar}>
-                                        <Image
-                                            src="/placeholder.svg?height=30&width=30"
-                                            width={30}
-                                            height={30}
-                                            alt="User avatar"
-                                            className={styles.avatar}
-                                        />
-                                    </div>
-                                    <div className={styles.userInfo}>
-                                        <div className={styles.userName}>AECH</div>
-                                        <div className={styles.userLocation}></div>
-                                    </div>
-                                    <button className={styles.shareButton}>
-                                        <Image
-                                            src="/placeholder.svg?height=16&width=16"
-                                            width={16}
-                                            height={16}
-                                            alt="Share"
-                                            className={styles.icon}
-                                        />
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Add more messages to ensure scrolling */}
-                            <div className={styles.chatMessage}>
-                                <p className={styles.messageText}>&quot;Has anyone found the hidden easter egg yet?&quot;</p>
-                                <div className={styles.messageUser}>
-                                    <div className={styles.userAvatar}>
-                                        <Image
-                                            src="/placeholder.svg?height=30&width=30"
-                                            width={30}
-                                            height={30}
-                                            alt="User avatar"
-                                            className={styles.avatar}
-                                        />
-                                    </div>
-                                    <div className={styles.userInfo}>
-                                        <div className={styles.userName}>GUNTER42</div>
-                                        <div className={styles.userLocation}>Arcade</div>
-                                    </div>
-                                    <button className={styles.shareButton}>
-                                        <Image
-                                            src="/placeholder.svg?height=16&width=16"
-                                            width={16}
-                                            height={16}
-                                            alt="Share"
-                                            className={styles.icon}
-                                        />
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className={styles.chatMessage}>
-                                <p className={styles.messageText}>&quot;The new update is amazing!&quot;</p>
-                                <div className={styles.messageUser}>
-                                    <div className={styles.userAvatar}>
-                                        <Image
-                                            src="/placeholder.svg?height=30&width=30"
-                                            width={30}
-                                            height={30}
-                                            alt="User avatar"
-                                            className={styles.avatar}
-                                        />
-                                    </div>
-                                    <div className={styles.userInfo}>
-                                        <div className={styles.userName}>CYBER_NINJA</div>
-                                        <div className={styles.userLocation}>Dojo</div>
-                                    </div>
-                                    <button className={styles.shareButton}>
-                                        <Image
-                                            src="/placeholder.svg?height=16&width=16"
-                                            width={16}
-                                            height={16}
-                                            alt="Share"
-                                            className={styles.icon}
-                                        />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className={styles.chatInput}>
-                            <input type="text" placeholder="Type here..." className={styles.messageInput} />
-                            <button className={styles.emojiButton}>
-                                <Image
-                                    src="/placeholder.svg?height=20&width=20"
-                                    width={20}
-                                    height={20}
-                                    alt="Emoji"
-                                    className={styles.icon}
-                                />
-                            </button>
-                            <button className={styles.sendButton}>
-                                <Image
-                                    src="/placeholder.svg?height=20&width=20"
-                                    width={20}
-                                    height={20}
-                                    alt="Send"
-                                    className={styles.icon}
-                                />
-                            </button>
-                        </div>
-                    </div>
-                )}
-            </div>
+      <div className={`${styles.cameraContainer} ${isMain ? styles.mainCameraView : ""}`}>
+        {/* Camera icon in top left */}
+        <div className={styles.cameraIconCircle}>
+          <Image src="/placeholder.svg?height=16&width=16" width={16} height={16} alt="Camera" />
         </div>
+
+        {/* Info button in top right */}
+        <div className={styles.infoButton}>
+          <Image src="/placeholder.svg?height=16&width=16" width={16} height={16} alt="Info" />
+        </div>
+
+        {isImage ? (
+          <Image
+            src={camera.src || "/placeholder.svg"}
+            alt={camera.name}
+            fill
+            className={isMain ? styles.videoPlayer : styles.smallVideo}
+          />
+        ) : (
+          <video
+            className={isMain ? styles.videoPlayer : styles.smallVideo}
+            muted
+            loop
+            playsInline
+            autoPlay
+            controls={isMain}
+          >
+            <source src={camera.src} type="video/mp4" />
+          </video>
+        )}
+
+
+        {/* Camera name and expand button */}
+        <div className={styles.cameraLabel}>
+          <span>{camera.name}</span>
+          {!isMain && (
+            <button className={styles.expandButton} onClick={() => expandCamera(camera)}>
+              <span>Expand</span>
+            </button>
+          )}
+        </div>
+
+        {isMain && (
+          <>
+            <div className={styles.mainCam}>
+              <div className={styles.camIcon}>
+                <Image
+                  src="/placeholder.svg?height=24&width=24"
+                  width={24}
+                  height={24}
+                  alt="Camera"
+                  className={styles.icon}
+                />
+              </div>
+              <div className={styles.camText}>
+                <div>{camera.name}</div>
+                <div className={styles.changeView} onClick={toggleViewMode}>
+                  Change View
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.liveIndicator}>
+              <div className={styles.liveIcon}>
+                <Image src="/assets/img/live.png" width={16} height={16} alt="Live" className={styles.icon} />
+                LIVE
+              </div>
+              <div className={styles.viewerCount}>
+                <Image
+                  src="/assets/img/iconImage/livefeed_3106921.png"
+                  width={16}
+                  height={16}
+                  alt="Viewers"
+                  className={styles.icon}
+                />
+                342
+              </div>
+            </div>
+            <div className={styles.infoBox}>
+              <p>Did you know that there are Segways you can ride in Starlight Plaza?</p>
+            </div>
+          </>
+        )}
+      </div>
     )
+  }
+
+  return (
+    <div className={`${styles.mainAndGameWrapper} ${!isChatOpen ? styles.fullWidth : ""}`}>
+      <div className={styles.mainContent}>
+        {viewMode === "single" ? (
+          // Single View Mode
+          <div className={styles.videoSection}>{renderCameraView(getCurrentCamera(), true)}</div>
+        ) : (
+          // Multi View Mode
+          <div className={styles.multiViewSection}>
+            <div className={styles.multiViewGrid}>
+              {/* Main camera is always first in multi-view */}
+              <div className={`${styles.multiViewItem} ${selectedCamera === mainCamera.id ? styles.activeCamera : ""}`}>
+                {renderCameraView(mainCamera)}
+              </div>
+
+              {/* Other cameras */}
+              {otherCameras.map((camera) => (
+                <div
+                  key={camera.id}
+                  className={`${styles.multiViewItem} ${selectedCamera === camera.id ? styles.activeCamera : ""}`}
+                >
+                  {renderCameraView(camera)}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Bottom Game Section */}
+      <div className={styles.gameSection}>
+        <div className={styles.gameContainer}>
+          <div className="relative w-full h-[230px]">
+            <Image src="/assets/img/funds/2d.png" alt="Game platform" fill className={styles.gamePlatform} priority />
+          </div>
+          <div className={styles.gameControls}>
+            <div className={styles.controlsLeft}>
+              <div className={styles.controlsGrid}>
+                <button className={styles.controlKey}>W</button>
+                <button className={styles.controlKey}>A</button>
+                <button className={styles.controlKey}>S</button>
+                <button className={styles.controlKey}>D</button>
+              </div>
+              <div className={styles.controlLabel}>Move</div>
+            </div>
+            <div className={styles.controlsRight}>
+              <button className={styles.spaceKey}>SPACE</button>
+              <div className={styles.controlLabel}>
+                Jump and
+                <br />
+                Double Jump
+              </div>
+            </div>
+          </div>
+          <div className={styles.gameSettings}>
+            <button className={styles.settingsButton}>
+              <svg
+                className="w-5 h-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </button>
+            <button className={styles.fullscreenButton}>
+              <svg
+                className="w-5 h-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
