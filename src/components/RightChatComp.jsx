@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react"
 import styles from "../custonCss/home.module.css"
 import Image from "next/image"
 import io from "socket.io-client"
+import AuthHeaderButtons from "../components/SignupLogin"
 
 const RealTimeChatComp = ({ streamId = "default-stream" }) => {
   const [isChatOpen, setIsChatOpen] = useState(true)
@@ -13,10 +14,30 @@ const RealTimeChatComp = ({ streamId = "default-stream" }) => {
   const [anonymousId, setAnonymousId] = useState("")
   const messagesEndRef = useRef(null)
 
+  // Auth related states
+  const [showAuthModal, setShowAuthModal] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userData, setUserData] = useState(null)
+
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen)
   }
-  
+
+  // Check if user is logged in
+  useEffect(() => {
+    // Check for auth token in localStorage
+    const token = localStorage.getItem("authToken")
+    if (token) {
+      setIsLoggedIn(true)
+      // You could fetch user data here if needed
+      const username = localStorage.getItem("username")
+      const avatar = localStorage.getItem("avatar") || "/placeholder.svg?height=40&width=40"
+      setUserData({ username, avatar })
+    } else {
+      setIsLoggedIn(false)
+      setUserData(null)
+    }
+  }, [])
 
   // Initialize socket connection
   useEffect(() => {
@@ -97,11 +118,34 @@ const RealTimeChatComp = ({ streamId = "default-stream" }) => {
     fetchMessages()
   }, [streamId])
 
-  // Send message function
+  // Handle auth state changes from AuthHeaderButtons
+  const handleAuthStateChange = (loggedIn, user) => {
+    console.log("Auth state changed:", loggedIn, user)
+    setIsLoggedIn(loggedIn)
+    setUserData(user)
+    setShowAuthModal(false)
+
+    // If logged in, update the chat header with the username
+    if (loggedIn && user) {
+      // Force a re-render by updating the state
+      setIsChatOpen(isChatOpen)
+    }
+  }
+
+  // Send message function - now checks for authentication
   const handleSendMessage = (e) => {
     e.preventDefault()
     if (!message.trim() || !socket || !connected) return
 
+    // Check if user is logged in
+    const token = localStorage.getItem("authToken")
+    if (!token) {
+      // Show auth modal if not logged in
+      setShowAuthModal(true)
+      return
+    }
+
+    // If logged in, send the message
     socket.emit("send_message", {
       content: message,
       streamId,
@@ -111,89 +155,121 @@ const RealTimeChatComp = ({ streamId = "default-stream" }) => {
   }
 
   return (
-    <div className={styles.chatSection} >
-      <div className={styles.chatHeader}>
-        {/*  this is for the upper close and open button  */}
-        <div className={styles.worldchat}>
-          <button onClick={toggleChat} className="btn">
+    <>
+      <div className={styles.chatSection}>
+        <div className={styles.chatHeader}>
+          {/*  this is for the upper close and open button  */}
+          <div className={styles.worldchat}>
+            <button onClick={toggleChat} className="btn">
+              <Image
+                src="/assets/img/iconImage/arrow.png?height=16&width=16"
+                width={16}
+                height={16}
+                alt="Chat"
+                className={styles.icon}
+              />
+            </button>
+            <h5>WORLDCHAT {isLoggedIn && userData ? `(${userData.username})` : ""}</h5>
+            <button className={styles.usersButton}>
+              <Image
+                src="/assets/img/iconImage/human.png?height=20&width=20"
+                width={20}
+                height={20}
+                alt="Users"
+                className={styles.icon}
+              />
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.chatMessages}>
+          {messages.length === 0 ? (
+            <div className={styles.systemMessage}>No messages yet. Start chatting!</div>
+          ) : (
+            messages.map((msg) => (
+              <div key={msg.id} className={styles.chatMessage}>
+                <p className={styles.messageText}>&quot;{msg.content}&quot;</p>
+                <div className={styles.messageUser}>
+                  <div className={styles.userAvatar}>
+                    <Image
+                      src={msg.sender.profilePicture || "/placeholder.svg?height=30&width=30"}
+                      width={30}
+                      height={30}
+                      alt="User avatar"
+                      className={styles.avatar}
+                    />
+                  </div>
+                  <div className={styles.userInfo}>
+                    <div className={styles.userName}>{msg.sender.username}</div>
+                    <div className={styles.userLocation}>{new Date(msg.timestamp).toLocaleTimeString()}</div>
+                  </div>
+                  <button className={styles.shareButton}>
+                    <Image
+                      src="/placeholder.svg?height=16&width=16"
+                      width={16}
+                      height={16}
+                      alt="Share"
+                      className={styles.icon}
+                    />
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+
+        <form onSubmit={handleSendMessage} className={styles.chatInput}>
+          <input
+            type="text"
+            placeholder="Type here..."
+            className={styles.messageInput}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            disabled={!connected}
+          />
+          <button type="button" className={styles.emojiButton}>
             <Image
-              src="/assets/img/iconImage/arrow.png?height=16&width=16"
-              width={16}
-              height={16}
-              alt="Chat"
-              className={styles.icon}
-            />
-          </button>
-          <h5>WORLDCHAT {connected }</h5>
-          <button className={styles.usersButton}>
-            <Image
-              src="/assets/img/iconImage/human.png?height=20&width=20"
+              src="/assets/img/chat/emoji.png?height=20&width=20"
               width={20}
               height={20}
-              alt="Users"
+              alt="Emoji"
               className={styles.icon}
             />
           </button>
+          <button type="submit" className={styles.sendButton} disabled={!connected || !message.trim()}>
+            <Image
+              src="/assets/img/chat/paper-plane_9187575.png?height=20&width=20"
+              width={20}
+              height={20}
+              alt="Send"
+              className={styles.icon}
+            />
+          </button>
+        </form>
+      </div>
+
+      {/* Auth Modal */}
+      {showAuthModal && (
+        <div
+          className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            backdropFilter: "blur(2px)",
+            zIndex: 1050,
+          }}
+        >
+          <AuthHeaderButtons
+            initialView="signup"
+            onAuthStateChange={handleAuthStateChange}
+            isModal={true}
+            onClose={() => setShowAuthModal(false)}
+          />
         </div>
-      </div>
-
-      <div className={styles.chatMessages}>
-        {messages.length === 0 ? (
-          <div className={styles.systemMessage}>No messages yet. Start chatting!</div>
-        ) : (
-          messages.map((msg) => (
-            <div key={msg.id} className={styles.chatMessage}>
-              <p className={styles.messageText}>&quot;{msg.content}&quot;</p>
-              <div className={styles.messageUser}>
-                <div className={styles.userAvatar}>
-                  <Image
-                    src={msg.sender.profilePicture || "/placeholder.svg?height=30&width=30"}
-                    width={30}
-                    height={30}
-                    alt="User avatar"
-                    className={styles.avatar}
-                  />
-                </div>
-                <div className={styles.userInfo}>
-                  <div className={styles.userName}>{msg.sender.username}</div>
-                  <div className={styles.userLocation}>{new Date(msg.timestamp).toLocaleTimeString()}</div>
-                </div>
-                <button className={styles.shareButton}>
-                  <Image
-                    src="/placeholder.svg?height=16&width=16"
-                    width={16}
-                    height={16}
-                    alt="Share"
-                    className={styles.icon}
-                  />
-                </button>
-              </div>
-            </div>
-          ))
-        )}
-        <div ref={messagesEndRef} />
-      </div>
-
-      <form onSubmit={handleSendMessage} className={styles.chatInput}>
-        <input
-          type="text"
-          placeholder="Type here..."
-          className={styles.messageInput}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          disabled={!connected}
-        />
-        <button type="button" className={styles.emojiButton}>
-          <Image src="/assets/img/chat/emoji.png?height=20&width=20" width={20} height={20} alt="Emoji" className={styles.icon} />
-        </button>
-        <button type="submit" className={styles.sendButton} disabled={!connected || !message.trim()}>
-          <Image src="/assets/img/chat/paper-plane_9187575.png?height=20&width=20" width={20} height={20} alt="Send" className={styles.icon} />
-        </button>
-      </form>
-    </div>
+      )}
+    </>
   )
 }
 
 export default RealTimeChatComp
-
 

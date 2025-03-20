@@ -1,11 +1,16 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 
-export default function AuthHeaderButtons() {
+export default function AuthHeaderButtons({
+  initialView = null,
+  onAuthStateChange = () => {},
+  isModal = false,
+  onClose = () => {},
+}) {
   // State for modals and authentication
-  const [showLoginModal, setShowLoginModal] = useState(false)
-  const [showSignupModal, setShowSignupModal] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(initialView === "login")
+  const [showSignupModal, setShowSignupModal] = useState(initialView === "signup" || (!initialView && isModal))
   const [showForgotPassword, setShowForgotPassword] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userData, setUserData] = useState(null)
@@ -21,6 +26,23 @@ export default function AuthHeaderButtons() {
   const [error, setError] = useState("")
   const [usernameTaken, setUsernameTaken] = useState(false)
   const suggestedUsernames = ["@mark2407", "@markJ007"]
+
+  // Check if user is already logged in on component mount
+  useEffect(() => {
+    const token = localStorage.getItem("authToken")
+    if (token) {
+      // You could verify the token here if needed
+      setIsLoggedIn(true)
+      // Set some basic user data
+      setUserData({
+        username: localStorage.getItem("username") || "User",
+        avatar: localStorage.getItem("avatar") || "/placeholder.svg?height=40&width=40",
+      })
+
+      // Notify parent component
+      onAuthStateChange(true, userData)
+    }
+  }, [])
 
   // Update the handleLoginChange function
   const handleLoginChange = (e) => {
@@ -38,7 +60,7 @@ export default function AuthHeaderButtons() {
     }
   }
 
-  // Update the handleLoginSubmit function with the API details
+  // Update the handleLoginSubmit function to ensure profile is immediately visible after login
   const handleLoginSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -50,7 +72,7 @@ export default function AuthHeaderButtons() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify(loginFormData),
       })
 
@@ -65,15 +87,31 @@ export default function AuthHeaderButtons() {
       // Save token if needed
       if (data.token) {
         localStorage.setItem("authToken", data.token)
+      } else {
+        // For demo purposes, set a dummy token if the API doesn't return one
+        localStorage.setItem("authToken", "demo-token-" + Date.now())
       }
+
+      // Save username and avatar for future reference
+      localStorage.setItem("username", loginFormData.username || "User")
+      localStorage.setItem("avatar", data.profilePicture || "/placeholder.svg?height=40&width=40")
 
       // Set user as logged in
       setIsLoggedIn(true)
-      setUserData({
+      const userData = {
         username: loginFormData.username || "MARK9874",
         avatar: data.profilePicture || "/placeholder.svg?height=40&width=40",
-      })
+      }
+      setUserData(userData)
       setShowLoginModal(false)
+
+      // Notify parent component about auth state change
+      onAuthStateChange(true, userData)
+
+      // If in modal mode, close the modal
+      if (isModal) {
+        onClose()
+      }
 
       // Reset form
       setLoginFormData({ username: "", password: "" })
@@ -108,18 +146,23 @@ export default function AuthHeaderButtons() {
 
       if (response.ok) {
         alert("Registration successful!")
-        setShowSignupModal(false)
 
-        // Reset form
+        // After successful signup, switch to login form
+        setShowSignupModal(false)
+        setShowLoginModal(true)
+
+        // Pre-fill the login form with the username from signup
+        setLoginFormData({
+          ...loginFormData,
+          username: signupFormData.username,
+        })
+
+        // Reset signup form
         setSignupFormData({
           username: "",
           email: "",
           password: "",
-          profilePicture: "",
         })
-
-        // Optionally switch to login modal
-        setShowLoginModal(true)
       } else {
         alert(data.message || "Registration failed")
       }
@@ -164,15 +207,33 @@ export default function AuthHeaderButtons() {
 
   // Handle logout
   const handleLogout = () => {
+    // Clear local storage
+    localStorage.removeItem("authToken")
+    localStorage.removeItem("username")
+    localStorage.removeItem("avatar")
+
     setIsLoggedIn(false)
     setUserData(null)
     setIsProfileMenuOpen(false)
+
+    // Notify parent component
+    onAuthStateChange(false, null)
+  }
+
+  // Close all modals
+  const closeAllModals = () => {
+    setShowLoginModal(false)
+    setShowSignupModal(false)
+    setShowForgotPassword(false)
+    if (isModal) {
+      onClose()
+    }
   }
 
   return (
     <>
-      {/* Auth Buttons */}
-      {!isLoggedIn ? (
+      {/* Auth Buttons - Only show if not in modal mode */}
+      {!isModal && !isLoggedIn ? (
         <div className="d-flex gap-2">
           {/* Login Button */}
           <button
@@ -234,7 +295,7 @@ export default function AuthHeaderButtons() {
             SIGNUP
           </button>
         </div>
-      ) : (
+      ) : !isModal && isLoggedIn ? (
         /* User Profile Section - Matches the screenshot design */
         <div className="position-relative">
           <div
@@ -244,8 +305,6 @@ export default function AuthHeaderButtons() {
               minWidth: "250px",
             }}
           >
-
-            
             {/* Settings Icon - Now as a link to settings page */}
             <a
               href="/setting"
@@ -281,38 +340,38 @@ export default function AuthHeaderButtons() {
                 <path d="M20.66 7l-1.73 1" />
               </svg>
             </a>
-<div className="d-flex align-items-center  bg-black px-3 py-2 rounded"   >
-            {/* User Info */}
-            <div className="d-flex flex-column ms-3 text-end ">
-              <span className="fw-bold text-white">{userData?.username || "MARK9874"}</span>
-              <span className="text-secondary small text-end" style={{ cursor: "pointer" }}>
-                Change Avatar
-              </span>
-            </div>
-            {/* Profile Picture with Verification Badge */}
-            <div className="position-relative ms-auto ">
-              <div
-                className="rounded-circle overflow-hidden"
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  border: "2px solid rgba(255, 255, 255, 0.1)",
-                  marginLeft:"10px"
-                }}
-                onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-              >
-                <Image
-                  src={userData?.avatar || "/placeholder.svg?height=40&width=40"}
-                  alt="Profile"
-                  width={40}
-                  height={40}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
-                />
+            <div className="d-flex align-items-center  bg-black px-3 py-2 rounded">
+              {/* User Info */}
+              <div className="d-flex flex-column ms-3 text-end ">
+                <span className="fw-bold text-white">{userData?.username || "MARK9874"}</span>
+                <span className="text-secondary small text-end" style={{ cursor: "pointer" }}>
+                  Change Avatar
+                </span>
               </div>
+              {/* Profile Picture with Verification Badge */}
+              <div className="position-relative ms-auto ">
+                <div
+                  className="rounded-circle overflow-hidden"
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    border: "2px solid rgba(255, 255, 255, 0.1)",
+                    marginLeft: "10px",
+                  }}
+                  onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                >
+                  <Image
+                    src={userData?.avatar || "/placeholder.svg?height=40&width=40"}
+                    alt="Profile"
+                    width={40}
+                    height={40}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </div>
               </div>
               {/* Verification Badge */}
               <div
@@ -432,404 +491,770 @@ export default function AuthHeaderButtons() {
             </div>
           )}
         </div>
-      )}
+      ) : null}
 
-      {/* Login Modal */}
-      {showLoginModal && (
-        <div
-          className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
-          style={{
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
-            backdropFilter: "blur(2px)",
-            zIndex: 1050,
-          }}
-        >
-          <div
-            className="card p-4 text-white position-relative"
-            style={{
-              backgroundColor: "#121212",
-              borderRadius: "10px",
-              width: "400px",
-              border: "2px solid #0dcaf0",
-            }}
-          >
-            {/* Close Button */}
-            <button
-              className="btn-close position-absolute top-0 end-0 m-2"
-              style={{ backgroundColor: "#fff", opacity: "1" }}
-              onClick={() => setShowLoginModal(false)}
-            ></button>
-
-            {/* Welcome Header */}
-            <div className="text-center mb-3">
-              <img
-                src="/assets/fonts/logo.png"
-                alt="M's TRIBE Logo"
-                style={{
-                  maxWidth: "150px",
-                  height: "auto",
-                }}
-              />
-            </div>
-
-            {/* Error Message */}
-            {error && <p className="text-danger text-center">{error}</p>}
-
-            {/* Login Form */}
-            <form onSubmit={handleLoginSubmit}>
-              {/* Username Field */}
-              <div className="mb-3">
-                <label className="form-label">Username</label>
-                <input
-                  type="text"
-                  name="username"
-                  className="form-control"
-                  placeholder="username"
-                  value={loginFormData.username}
-                  onChange={handleLoginChange}
-                  required
-                  style={{ backgroundColor: "#1a1a1a",
-                    borderColor: "#333",
-                    color: "#fff", }}
-                />
-              </div>
-
-              {/* Password Field */}
-              <div className="mb-3">
-                <label className="form-label">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  className="form-control"
-                  placeholder="Enter your password"
-                  value={loginFormData.password}
-                  onChange={handleLoginChange}
-                  required
-                  style={{  backgroundColor: "#1a1a1a",
-                    borderColor: "#333",
-                    color: "#fff", }}
-                />
-              </div>
-
-              {/* Sign In Button */}
-              <button
-                type="submit"
-                className="btn w-100 mb-2"
-                disabled={loading}
-                style={{
-                  backgroundColor: "#07a1fe",
-                  color: "#fff",
-                  fontWeight: "bold",
-                  borderRadius: "5px",
-                }}
-              >
-                {loading ? "Signing In..." : "Sign In"}
-              </button>
-            </form>
-
-            {/* Sign in with Google */}
-            <button
-              className="btn btn-light w-100 d-flex align-items-center justify-content-center mb-2"
-              style={{ borderRadius: "5px" }}
-            >
-              <img
-                src="/assets/img/iconImage/g.webp"
-                alt="google"
-                width="25"
-                height="25"
-                className="me-2"
-                onError={(e) => {
-                  console.log("Image failed to load:", e.target.src)
-                  e.target.src = "https://via.placeholder.com/20"
-                }}
-              />
-              Sign in with Google
-            </button>
-
-            {/* Remember Checkbox and Forgot Password */}
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <div className="form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="rememberMe"
-                  style={{ backgroundColor: "#737374", borderColor: "#333" }}
-                />
-                <label className="form-check-label text-white" htmlFor="rememberMe">
-                  Remember for 30 days
-                </label>
-              </div>
-              <div className="text-center">
-                <a
-                  onClick={() => {
-                    setShowLoginModal(false)
-                    setShowForgotPassword(true)
-                  }}
-                  className="text-info"
-                  style={{ cursor: "pointer" }}
-                >
-                  Forgot password?
-                </a>
-              </div>
-            </div>
-
-            {/* Sign Up Link */}
-            <div className="text-center">
-              <small>
-                Don't have an account?{" "}
-                <a
-                  className="text-info"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setShowLoginModal(false)
-                    setShowSignupModal(true)
-                  }}
-                >
-                  Sign up
-                </a>
-              </small>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Signup Modal */}
-      {showSignupModal && (
-        <div
-          className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
-          style={{
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
-            backdropFilter: "blur(2px)",
-            zIndex: 1050,
-          }}
-        >
-          <div
-            className="card p-4 text-white position-relative"
-            style={{
-              backgroundColor: "#121212",
-              borderRadius: "10px",
-              width: "400px",
-              border: "2px solid #0dcaf0",
-            }}
-          >
-            {/* Close Button (X) */}
-            <button
-              className="btn-close position-absolute top-0 end-0 m-2"
-              style={{ backgroundColor: "#fff", opacity: "1" }}
-              onClick={() => setShowSignupModal(false)}
-            ></button>
-
-            {/* Welcome Header replaced with Image */}
-            <div className="text-center mb-3">
-              <img
-                src="/assets/fonts/logo.png"
-                alt="M's TRIBE Logo"
-                style={{
-                  maxWidth: "150px",
-                  height: "auto",
-                }}
-              />
-            </div>
-
-            {/* Form wrapper */}
-            <form onSubmit={handleSignupSubmit}>
-              {/* Username Field */}
-              <div className="mb-3">
-                <label className="form-label">Username</label>
-                <input
-                  type="text"
-                  name="username"
-                  className={`form-control ${usernameTaken ? "is-invalid" : ""}`}
-                  placeholder="Enter your username"
-                  value={signupFormData.username}
-                  onChange={handleSignupChange}
-                  style={{backgroundColor: "#1a1a1a",
-                    borderColor: "#333",
-                    color: "#fff", }}
-                />
-                {usernameTaken && (
-                  <div className="text-danger mt-1">
-                    Username already taken <span style={{ color: "#dc3545" }}>✗</span>
-                  </div>
-                )}
-                {usernameTaken && (
-                  <div className="mt-2">
-                    <small>Use Suggested: </small>
-                    {suggestedUsernames.map((name) => (
-                      <button
-                        key={name}
-                        type="button" // Prevent form submission
-                        className="btn btn-sm btn-outline-info mx-1"
-                        onClick={() => setSignupFormData({ ...signupFormData, username: name.replace("@", "") })}
-                        style={{ color: "#0dcaf0", borderColor: "#0dcaf0" }}
-                      >
-                        {name}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Email Field */}
-              <div className="mb-3">
-                <label className="form-label">Email address</label>
-                <input
-                  type="email"
-                  name="email"
-                  className="form-control"
-                  placeholder="mark@gmail.com"
-                  value={signupFormData.email}
-                  onChange={handleSignupChange}
-                  style={{ backgroundColor: "#1a1a1a",
-                    borderColor: "#333",
-                    color: "#fff", }}
-                />
-              </div>
-
-              {/* Password Field */}
-              <div className="mb-3">
-                <label className="form-label">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  className="form-control"
-                  placeholder="Enter your password"
-                  value={signupFormData.password}
-                  onChange={handleSignupChange}
-                  style={{  backgroundColor: "#1a1a1a",
-                    borderColor: "#333",
-                    color: "#fff", }}
-                />
-              </div>
-
-              {/* Sign Up Button */}
-              <button
-                type="submit"
-                className="btn w-100 mb-2"
-                style={{
-                  backgroundColor: "#0dcaf0",
-                  color: "#fff",
-                  fontWeight: "bold",
-                  borderRadius: "5px",
-                }}
-              >
-                Sign Up
-              </button>
-            </form>
-
-            {/* Sign up with Google Button */}
-            <button
-              className="btn btn-light w-100 d-flex align-items-center justify-content-center"
-              style={{ borderRadius: "5px" }}
-            >
-              <img src="/assets/img/iconImage/g.webp" alt="Google" width="20" height="20" className="me-2" />
-              Sign up with Google
-            </button>
-
-            {/* Login Link */}
-            <div className="text-center mt-3">
-              <small>
-                Already have an account?{" "}
-                <a
-                  onClick={() => {
-                    setShowSignupModal(false)
-                    setShowLoginModal(true)
-                  }}
-                  className="text-info"
-                  style={{ cursor: "pointer" }}
-                >
-                  Login?
-                </a>
-              </small>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Forgot Password Modal */}
-      {showForgotPassword && (
-        <div
-          className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
-          style={{
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
-            backdropFilter: "blur(2px)",
-            zIndex: 1051,
-          }}
-        >
-         <div className="position-fixed top-50 start-50 translate-middle">
-      <div
-        className="card text-white p-4 position-relative"
-        style={{
-          backgroundColor: "#121212",
-          borderRadius: "12px",
-          width: "400px",
-          border: "2px solid #0dcaf0",
-        }}
-      >
-        {/* Close Button */}
-        <button
-          className="btn-close position-absolute top-0 end-0 m-3"
-          style={{ backgroundColor: "#fff", opacity: "1" }}
-          onClick={() => setShowForgotPassword(false)}
-        ></button>
-
-        {/* Emoji + Heading */}
-        <div className="flex flex-col items-center mb-2 mt-2">
-            {/* Emoji with proper sizing */}
-            <div className="text-7xl mb-6">
-              <span role="img" aria-label="crying emoji">
-                😭
-              </span>
-            </div>
-
-            {/* Heading with matching style */}
-            <h2 className="text-1xl font-bold mb-2 text-center">Forgot your password?</h2>
-
-            {/* Subtitle with matching style */}
-            <p className="text-gray-400 text-center mb-6">Reset your password using your registered email address.</p>
-          </div>
-
-        {/* Form */}
-        <form onSubmit={handleForgotPasswordSubmit}>
-          <div className="mb-3">
-            <label className="form-label fw-bold">Email address</label>
-            <input
-              type="email"
-              className="form-control"
-              placeholder="Enter your email address"
-              value={forgotPasswordEmail}
-              onChange={(e) => setForgotPasswordEmail(e.target.value)}
+      {/* When in modal mode, show the appropriate modal */}
+      {isModal && (
+        <>
+          {showLoginModal && (
+            <div
+              className="card p-4 text-white position-relative"
               style={{
-                backgroundColor: "#1a1a1a",
-                borderColor: "#333",
-                color: "#fff",
+                backgroundColor: "#121212",
+                borderRadius: "10px",
+                width: "400px",
+                border: "2px solid #0dcaf0",
               }}
-              required
-            />
-          </div>
+            >
+              {/* Close Button */}
+              <button
+                className="btn-close position-absolute top-0 end-0 m-2"
+                style={{ backgroundColor: "#fff", opacity: "1" }}
+                onClick={closeAllModals}
+              ></button>
 
-          {/* Reset Password Button */}
-          <button
-            type="submit"
-            className="btn w-100"
-            style={{
-              backgroundColor: "#07a1fe",
-              color: "#fff",
-              fontWeight: "bold",
-              borderRadius: "5px",
-            }}
-          >
-            Reset password
-          </button>
-        </form>
+              {/* Welcome Header */}
+              <div className="text-center mb-3">
+                <img
+                  src="/assets/fonts/logo.png"
+                  alt="M's TRIBE Logo"
+                  style={{
+                    maxWidth: "150px",
+                    height: "auto",
+                  }}
+                />
+              </div>
 
-        {/* Support Section */}
-        <p className="text-center mt-3">
-          Need help?? <a href="/support"  className="text-white hover:underline">Contact Support</a>
-        </p>
-      </div>
-    </div>
-        </div>
+              {/* Error Message */}
+              {error && <p className="text-danger text-center">{error}</p>}
+
+              {/* Login Form */}
+              <form onSubmit={handleLoginSubmit}>
+                {/* Username Field */}
+                <div className="mb-3">
+                  <label className="form-label">Username</label>
+                  <input
+                    type="text"
+                    name="username"
+                    className="form-control"
+                    placeholder="username"
+                    value={loginFormData.username}
+                    onChange={handleLoginChange}
+                    required
+                    style={{ backgroundColor: "#1a1a1a", borderColor: "#333", color: "#fff" }}
+                  />
+                </div>
+
+                {/* Password Field */}
+                <div className="mb-3">
+                  <label className="form-label">Password</label>
+                  <input
+                    type="password"
+                    name="password"
+                    className="form-control"
+                    placeholder="Enter your password"
+                    value={loginFormData.password}
+                    onChange={handleLoginChange}
+                    required
+                    style={{ backgroundColor: "#1a1a1a", borderColor: "#333", color: "#fff" }}
+                  />
+                </div>
+
+                {/* Sign In Button */}
+                <button
+                  type="submit"
+                  className="btn w-100 mb-2"
+                  disabled={loading}
+                  style={{
+                    backgroundColor: "#07a1fe",
+                    color: "#fff",
+                    fontWeight: "bold",
+                    borderRadius: "5px",
+                  }}
+                >
+                  {loading ? "Signing In..." : "Sign In"}
+                </button>
+              </form>
+
+              {/* Sign in with Google */}
+              <button
+                className="btn btn-light w-100 d-flex align-items-center justify-content-center mb-2"
+                style={{ borderRadius: "5px" }}
+              >
+                <img
+                  src="/assets/img/iconImage/g.webp"
+                  alt="google"
+                  width="25"
+                  height="25"
+                  className="me-2"
+                  onError={(e) => {
+                    console.log("Image failed to load:", e.target.src)
+                    e.target.src = "https://via.placeholder.com/20"
+                  }}
+                />
+                Sign in with Google
+              </button>
+
+              {/* Remember Checkbox and Forgot Password */}
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="rememberMe"
+                    style={{ backgroundColor: "#737374", borderColor: "#333" }}
+                  />
+                  <label className="form-check-label text-white" htmlFor="rememberMe">
+                    Remember for 30 days
+                  </label>
+                </div>
+                <div className="text-center">
+                  <a
+                    onClick={() => {
+                      setShowLoginModal(false)
+                      setShowForgotPassword(true)
+                    }}
+                    className="text-info"
+                    style={{ cursor: "pointer" }}
+                  >
+                    Forgot password?
+                  </a>
+                </div>
+              </div>
+
+              {/* Sign Up Link */}
+              <div className="text-center">
+                <small>
+                  Don't have an account?{" "}
+                  <a
+                    className="text-info"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      setShowLoginModal(false)
+                      setShowSignupModal(true)
+                    }}
+                  >
+                    Sign up
+                  </a>
+                </small>
+              </div>
+            </div>
+          )}
+
+          {showSignupModal && (
+            <div
+              className="card p-4 text-white position-relative"
+              style={{
+                backgroundColor: "#121212",
+                borderRadius: "10px",
+                width: "400px",
+                border: "2px solid #0dcaf0",
+              }}
+            >
+              {/* Close Button (X) */}
+              <button
+                className="btn-close position-absolute top-0 end-0 m-2"
+                style={{ backgroundColor: "#fff", opacity: "1" }}
+                onClick={closeAllModals}
+              ></button>
+
+              {/* Welcome Header replaced with Image */}
+              <div className="text-center mb-3">
+                <img
+                  src="/assets/fonts/logo.png"
+                  alt="M's TRIBE Logo"
+                  style={{
+                    maxWidth: "150px",
+                    height: "auto",
+                  }}
+                />
+              </div>
+
+              {/* Form wrapper */}
+              <form onSubmit={handleSignupSubmit}>
+                {/* Username Field */}
+                <div className="mb-3">
+                  <label className="form-label">Username</label>
+                  <input
+                    type="text"
+                    name="username"
+                    className={`form-control ${usernameTaken ? "is-invalid" : ""}`}
+                    placeholder="Enter your username"
+                    value={signupFormData.username}
+                    onChange={handleSignupChange}
+                    style={{ backgroundColor: "#1a1a1a", borderColor: "#333", color: "#fff" }}
+                  />
+                  {usernameTaken && (
+                    <div className="text-danger mt-1">
+                      Username already taken <span style={{ color: "#dc3545" }}>✗</span>
+                    </div>
+                  )}
+                  {usernameTaken && (
+                    <div className="mt-2">
+                      <small>Use Suggested: </small>
+                      {suggestedUsernames.map((name) => (
+                        <button
+                          key={name}
+                          type="button" // Prevent form submission
+                          className="btn btn-sm btn-outline-info mx-1"
+                          onClick={() => setSignupFormData({ ...signupFormData, username: name.replace("@", "") })}
+                          style={{ color: "#0dcaf0", borderColor: "#0dcaf0" }}
+                        >
+                          {name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Email Field */}
+                <div className="mb-3">
+                  <label className="form-label">Email address</label>
+                  <input
+                    type="email"
+                    name="email"
+                    className="form-control"
+                    placeholder="mark@gmail.com"
+                    value={signupFormData.email}
+                    onChange={handleSignupChange}
+                    style={{ backgroundColor: "#1a1a1a", borderColor: "#333", color: "#fff" }}
+                  />
+                </div>
+
+                {/* Password Field */}
+                <div className="mb-3">
+                  <label className="form-label">Password</label>
+                  <input
+                    type="password"
+                    name="password"
+                    className="form-control"
+                    placeholder="Enter your password"
+                    value={signupFormData.password}
+                    onChange={handleSignupChange}
+                    style={{ backgroundColor: "#1a1a1a", borderColor: "#333", color: "#fff" }}
+                  />
+                </div>
+
+                {/* Sign Up Button */}
+                <button
+                  type="submit"
+                  className="btn w-100 mb-2"
+                  style={{
+                    backgroundColor: "#0dcaf0",
+                    color: "#fff",
+                    fontWeight: "bold",
+                    borderRadius: "5px",
+                  }}
+                >
+                  Sign Up
+                </button>
+              </form>
+
+              {/* Sign up with Google Button */}
+              <button
+                className="btn btn-light w-100 d-flex align-items-center justify-content-center"
+                style={{ borderRadius: "5px" }}
+              >
+                <img src="/assets/img/iconImage/g.webp" alt="Google" width="20" height="20" className="me-2" />
+                Sign up with Google
+              </button>
+
+              {/* Login Link */}
+              <div className="text-center mt-3">
+                <small>
+                  Already have an account?{" "}
+                  <a
+                    onClick={() => {
+                      setShowSignupModal(false)
+                      setShowLoginModal(true)
+                    }}
+                    className="text-info"
+                    style={{ cursor: "pointer" }}
+                  >
+                    Login?
+                  </a>
+                </small>
+              </div>
+            </div>
+          )}
+
+          {showForgotPassword && (
+            <div
+              className="card text-white p-4 position-relative"
+              style={{
+                backgroundColor: "#121212",
+                borderRadius: "12px",
+                width: "400px",
+                border: "2px solid #0dcaf0",
+              }}
+            >
+              {/* Close Button */}
+              <button
+                className="btn-close position-absolute top-0 end-0 m-3"
+                style={{ backgroundColor: "#fff", opacity: "1" }}
+                onClick={closeAllModals}
+              ></button>
+
+              {/* Emoji + Heading */}
+              <div className="flex flex-col items-center mb-2 mt-2">
+                {/* Emoji with proper sizing */}
+                <div className="text-7xl mb-6">
+                  <span role="img" aria-label="crying emoji">
+                    😭
+                  </span>
+                </div>
+
+                {/* Heading with matching style */}
+                <h2 className="text-1xl font-bold mb-2 text-center">Forgot your password?</h2>
+
+                {/* Subtitle with matching style */}
+                <p className="text-gray-400 text-center mb-6">
+                  Reset your password using your registered email address.
+                </p>
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleForgotPasswordSubmit}>
+                <div className="mb-3">
+                  <label className="form-label fw-bold">Email address</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    placeholder="Enter your email address"
+                    value={forgotPasswordEmail}
+                    onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                    style={{
+                      backgroundColor: "#1a1a1a",
+                      borderColor: "#333",
+                      color: "#fff",
+                    }}
+                    required
+                  />
+                </div>
+
+                {/* Reset Password Button */}
+                <button
+                  type="submit"
+                  className="btn w-100"
+                  style={{
+                    backgroundColor: "#07a1fe",
+                    color: "#fff",
+                    fontWeight: "bold",
+                    borderRadius: "5px",
+                  }}
+                >
+                  Reset password
+                </button>
+              </form>
+
+              {/* Support Section */}
+              <p className="text-center mt-3">
+                Need help??{" "}
+                <a href="/support" className="text-white hover:underline">
+                  Contact Support
+                </a>
+              </p>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Non-modal login/signup/forgot password modals */}
+      {!isModal && (
+        <>
+          {/* Login Modal */}
+          {showLoginModal && (
+            <div
+              className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+              style={{
+                backgroundColor: "rgba(0, 0, 0, 0.7)",
+                backdropFilter: "blur(2px)",
+                zIndex: 1050,
+              }}
+            >
+              <div
+                className="card p-4 text-white position-relative"
+                style={{
+                  backgroundColor: "#121212",
+                  borderRadius: "10px",
+                  width: "400px",
+                  border: "2px solid #0dcaf0",
+                }}
+              >
+                {/* Close Button */}
+                <button
+                  className="btn-close position-absolute top-0 end-0 m-2"
+                  style={{ backgroundColor: "#fff", opacity: "1" }}
+                  onClick={closeAllModals}
+                ></button>
+
+                {/* Welcome Header */}
+                <div className="text-center mb-3">
+                  <img
+                    src="/assets/fonts/logo.png"
+                    alt="M's TRIBE Logo"
+                    style={{
+                      maxWidth: "150px",
+                      height: "auto",
+                    }}
+                  />
+                </div>
+
+                {/* Error Message */}
+                {error && <p className="text-danger text-center">{error}</p>}
+
+                {/* Login Form */}
+                <form onSubmit={handleLoginSubmit}>
+                  {/* Username Field */}
+                  <div className="mb-3">
+                    <label className="form-label">Username</label>
+                    <input
+                      type="text"
+                      name="username"
+                      className="form-control"
+                      placeholder="username"
+                      value={loginFormData.username}
+                      onChange={handleLoginChange}
+                      required
+                      style={{ backgroundColor: "#1a1a1a", borderColor: "#333", color: "#fff" }}
+                    />
+                  </div>
+
+                  {/* Password Field */}
+                  <div className="mb-3">
+                    <label className="form-label">Password</label>
+                    <input
+                      type="password"
+                      name="password"
+                      className="form-control"
+                      placeholder="Enter your password"
+                      value={loginFormData.password}
+                      onChange={handleLoginChange}
+                      required
+                      style={{ backgroundColor: "#1a1a1a", borderColor: "#333", color: "#fff" }}
+                    />
+                  </div>
+
+                  {/* Sign In Button */}
+                  <button
+                    type="submit"
+                    className="btn w-100 mb-2"
+                    disabled={loading}
+                    style={{
+                      backgroundColor: "#07a1fe",
+                      color: "#fff",
+                      fontWeight: "bold",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    {loading ? "Signing In..." : "Sign In"}
+                  </button>
+                </form>
+
+                {/* Sign in with Google */}
+                <button
+                  className="btn btn-light w-100 d-flex align-items-center justify-content-center mb-2"
+                  style={{ borderRadius: "5px" }}
+                >
+                  <img
+                    src="/assets/img/iconImage/g.webp"
+                    alt="google"
+                    width="25"
+                    height="25"
+                    className="me-2"
+                    onError={(e) => {
+                      console.log("Image failed to load:", e.target.src)
+                      e.target.src = "https://via.placeholder.com/20"
+                    }}
+                  />
+                  Sign in with Google
+                </button>
+
+                {/* Remember Checkbox and Forgot Password */}
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <div className="form-check">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="rememberMe"
+                      style={{ backgroundColor: "#737374", borderColor: "#333" }}
+                    />
+                    <label className="form-check-label text-white" htmlFor="rememberMe">
+                      Remember for 30 days
+                    </label>
+                  </div>
+                  <div className="text-center">
+                    <a
+                      onClick={() => {
+                        setShowLoginModal(false)
+                        setShowForgotPassword(true)
+                      }}
+                      className="text-info"
+                      style={{ cursor: "pointer" }}
+                    >
+                      Forgot password?
+                    </a>
+                  </div>
+                </div>
+
+                {/* Sign Up Link */}
+                <div className="text-center">
+                  <small>
+                    Don't have an account?{" "}
+                    <a
+                      className="text-info"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setShowLoginModal(false)
+                        setShowSignupModal(true)
+                      }}
+                    >
+                      Sign up
+                    </a>
+                  </small>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Signup Modal */}
+          {showSignupModal && (
+            <div
+              className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+              style={{
+                backgroundColor: "rgba(0, 0, 0, 0.7)",
+                backdropFilter: "blur(2px)",
+                zIndex: 1050,
+              }}
+            >
+              <div
+                className="card p-4 text-white position-relative"
+                style={{
+                  backgroundColor: "#121212",
+                  borderRadius: "10px",
+                  width: "400px",
+                  border: "2px solid #0dcaf0",
+                }}
+              >
+                {/* Close Button (X) */}
+                <button
+                  className="btn-close position-absolute top-0 end-0 m-2"
+                  style={{ backgroundColor: "#fff", opacity: "1" }}
+                  onClick={closeAllModals}
+                ></button>
+
+                {/* Welcome Header replaced with Image */}
+                <div className="text-center mb-3">
+                  <img
+                    src="/assets/fonts/logo.png"
+                    alt="M's TRIBE Logo"
+                    style={{
+                      maxWidth: "150px",
+                      height: "auto",
+                    }}
+                  />
+                </div>
+
+                {/* Form wrapper */}
+                <form onSubmit={handleSignupSubmit}>
+                  {/* Username Field */}
+                  <div className="mb-3">
+                    <label className="form-label">Username</label>
+                    <input
+                      type="text"
+                      name="username"
+                      className={`form-control ${usernameTaken ? "is-invalid" : ""}`}
+                      placeholder="Enter your username"
+                      value={signupFormData.username}
+                      onChange={handleSignupChange}
+                      style={{ backgroundColor: "#1a1a1a", borderColor: "#333", color: "#fff" }}
+                    />
+                    {usernameTaken && (
+                      <div className="text-danger mt-1">
+                        Username already taken <span style={{ color: "#dc3545" }}>✗</span>
+                      </div>
+                    )}
+                    {usernameTaken && (
+                      <div className="mt-2">
+                        <small>Use Suggested: </small>
+                        {suggestedUsernames.map((name) => (
+                          <button
+                            key={name}
+                            type="button" // Prevent form submission
+                            className="btn btn-sm btn-outline-info mx-1"
+                            onClick={() => setSignupFormData({ ...signupFormData, username: name.replace("@", "") })}
+                            style={{ color: "#0dcaf0", borderColor: "#0dcaf0" }}
+                          >
+                            {name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Email Field */}
+                  <div className="mb-3">
+                    <label className="form-label">Email address</label>
+                    <input
+                      type="email"
+                      name="email"
+                      className="form-control"
+                      placeholder="mark@gmail.com"
+                      value={signupFormData.email}
+                      onChange={handleSignupChange}
+                      style={{ backgroundColor: "#1a1a1a", borderColor: "#333", color: "#fff" }}
+                    />
+                  </div>
+
+                  {/* Password Field */}
+                  <div className="mb-3">
+                    <label className="form-label">Password</label>
+                    <input
+                      type="password"
+                      name="password"
+                      className="form-control"
+                      placeholder="Enter your password"
+                      value={signupFormData.password}
+                      onChange={handleSignupChange}
+                      style={{ backgroundColor: "#1a1a1a", borderColor: "#333", color: "#fff" }}
+                    />
+                  </div>
+
+                  {/* Sign Up Button */}
+                  <button
+                    type="submit"
+                    className="btn w-100 mb-2"
+                    style={{
+                      backgroundColor: "#0dcaf0",
+                      color: "#fff",
+                      fontWeight: "bold",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    Sign Up
+                  </button>
+                </form>
+
+                {/* Sign up with Google Button */}
+                <button
+                  className="btn btn-light w-100 d-flex align-items-center justify-content-center"
+                  style={{ borderRadius: "5px" }}
+                >
+                  <img src="/assets/img/iconImage/g.webp" alt="Google" width="20" height="20" className="me-2" />
+                  Sign up with Google
+                </button>
+
+                {/* Login Link */}
+                <div className="text-center mt-3">
+                  <small>
+                    Already have an account?{" "}
+                    <a
+                      onClick={() => {
+                        setShowSignupModal(false)
+                        setShowLoginModal(true)
+                      }}
+                      className="text-info"
+                      style={{ cursor: "pointer" }}
+                    >
+                      Login?
+                    </a>
+                  </small>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Forgot Password Modal */}
+          {showForgotPassword && (
+            <div
+              className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+              style={{
+                backgroundColor: "rgba(0, 0, 0, 0.7)",
+                backdropFilter: "blur(2px)",
+                zIndex: 1051,
+              }}
+            >
+              <div className="position-fixed top-50 start-50 translate-middle">
+                <div
+                  className="card text-white p-4 position-relative"
+                  style={{
+                    backgroundColor: "#121212",
+                    borderRadius: "12px",
+                    width: "400px",
+                    border: "2px solid #0dcaf0",
+                  }}
+                >
+                  {/* Close Button */}
+                  <button
+                    className="btn-close position-absolute top-0 end-0 m-3"
+                    style={{ backgroundColor: "#fff", opacity: "1" }}
+                    onClick={closeAllModals}
+                  ></button>
+
+                  {/* Emoji + Heading */}
+                  <div className="flex flex-col items-center mb-2 mt-2">
+                    {/* Emoji with proper sizing */}
+                    <div className="text-7xl mb-6">
+                      <span role="img" aria-label="crying emoji">
+                        😭
+                      </span>
+                    </div>
+
+                    {/* Heading with matching style */}
+                    <h2 className="text-1xl font-bold mb-2 text-center">Forgot your password?</h2>
+
+                    {/* Subtitle with matching style */}
+                    <p className="text-gray-400 text-center mb-6">
+                      Reset your password using your registered email address.
+                    </p>
+                  </div>
+
+                  {/* Form */}
+                  <form onSubmit={handleForgotPasswordSubmit}>
+                    <div className="mb-3">
+                      <label className="form-label fw-bold">Email address</label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        placeholder="Enter your email address"
+                        value={forgotPasswordEmail}
+                        onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                        style={{
+                          backgroundColor: "#1a1a1a",
+                          borderColor: "#333",
+                          color: "#fff",
+                        }}
+                        required
+                      />
+                    </div>
+
+                    {/* Reset Password Button */}
+                    <button
+                      type="submit"
+                      className="btn w-100"
+                      style={{
+                        backgroundColor: "#07a1fe",
+                        color: "#fff",
+                        fontWeight: "bold",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      Reset password
+                    </button>
+                  </form>
+
+                  {/* Support Section */}
+                  <p className="text-center mt-3">
+                    Need help??{" "}
+                    <a href="/support" className="text-white hover:underline">
+                      Contact Support
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </>
   )
