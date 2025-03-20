@@ -146,26 +146,26 @@ const RealTimeChatComp = ({ streamId = "default-stream" }) => {
               <p className={styles.messageText}>&quot;{msg.content}&quot;</p>
               <div className={styles.messageUser}>
                 <div className={styles.userAvatar}>
-                  <Image
+                  {/* <Image
                     src={msg.sender.profilePicture || "/placeholder.svg?height=30&width=30"}
                     width={30}
                     height={30}
                     alt="User avatar"
                     className={styles.avatar}
-                  />
+                  /> */}
                 </div>
                 <div className={styles.userInfo}>
                   <div className={styles.userName}>{msg.sender.username}</div>
                   <div className={styles.userLocation}>{new Date(msg.timestamp).toLocaleTimeString()}</div>
                 </div>
                 <button className={styles.shareButton}>
-                  <Image
+                  {/* <Image
                     src="/placeholder.svg?height=16&width=16"
                     width={16}
                     height={16}
                     alt="Share"
                     className={styles.icon}
-                  />
+                  /> */}
                 </button>
               </div>
             </div>

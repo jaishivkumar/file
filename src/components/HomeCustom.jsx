@@ -47,12 +47,12 @@ export default function Home() {
       <div className={`${styles.cameraContainer} ${isMain ? styles.mainCameraView : ""}`}>
         {/* Camera icon in top left */}
         <div className={styles.cameraIconCircle}>
-          <Image src="/placeholder.svg?height=16&width=16" width={16} height={16} alt="Camera" />
+          {/* <Image src="/placeholder.svg?height=16&width=16" width={16} height={16} alt="Camera" /> */}
         </div>
 
         {/* Info button in top right */}
         <div className={styles.infoButton}>
-          <Image src="/placeholder.svg?height=16&width=16" width={16} height={16} alt="Info" />
+          {/* <Image src="/placeholder.svg?height=16&width=16" width={16} height={16} alt="Info" /> */}
         </div>
 
         {isImage ? (
@@ -90,13 +90,13 @@ export default function Home() {
           <>
             <div className={styles.mainCam}>
               <div className={styles.camIcon}>
-                <Image
+                {/* <Image
                   src="/placeholder.svg?height=24&width=24"
                   width={24}
                   height={24}
                   alt="Camera"
                   className={styles.icon}
-                />
+                /> */}
               </div>
               <div className={styles.camText}>
                 <div>{camera.name}</div>
