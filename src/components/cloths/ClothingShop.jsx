@@ -666,94 +666,95 @@ const ClothingShop = () => {
   };
 
   return (
-    // <Container fluid className={styles.clothingShop}>
-    //   {/* Top Bar: Filters and Balance */}
-    //   <Row className={styles.topBar}>
-    //     <Col md={3}>
-    //       <Dropdown onSelect={(key) => setGenreFilter(key)}>
-    //         <Dropdown.Toggle variant="secondary">GENRE: {genreFilter}</Dropdown.Toggle>
-    //         <Dropdown.Menu>
-    //           <Dropdown.Item eventKey="ALL">ALL</Dropdown.Item>
-    //           <Dropdown.Item eventKey="CASUAL">CASUAL</Dropdown.Item>
-    //           <Dropdown.Item eventKey="SPORTS">SPORTS</Dropdown.Item>
-    //           <Dropdown.Item eventKey="FORMALS">FORMALS</Dropdown.Item>
-    //         </Dropdown.Menu>
-    //       </Dropdown>
-    //     </Col>
-    //     <Col md={3}>
-    //       <Dropdown onSelect={(key) => setPriceFilter(key)}>
-    //         <Dropdown.Toggle variant="secondary">PRICE: {priceFilter}</Dropdown.Toggle>
-    //         <Dropdown.Menu>
-    //           <Dropdown.Item eventKey="A">A</Dropdown.Item>
-    //           <Dropdown.Item eventKey="B">B</Dropdown.Item>
-    //         </Dropdown.Menu>
-    //       </Dropdown>
-    //     </Col>
-    //     <Col md={3}>
-    //       <Button variant="secondary">GO TO INVENTORY</Button>
-    //     </Col>
-    //     <Col md={3} className={styles.textRight}>
-    //       <Button variant="success">BALANCE: ${balance}</Button>
-    //     </Col>
-    //   </Row>
+    <Container fluid className={styles.clothingShop}>
+      {/* Top Bar: Filters and Balance */}
+      <Row className={styles.topBar}>
+        <Col md={3}>
+          <Dropdown onSelect={(key) => setGenreFilter(key)}>
+            <Dropdown.Toggle variant="secondary">GENRE: {genreFilter}</Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item eventKey="ALL">ALL</Dropdown.Item>
+              <Dropdown.Item eventKey="CASUAL">CASUAL</Dropdown.Item>
+              <Dropdown.Item eventKey="SPORTS">SPORTS</Dropdown.Item>
+              <Dropdown.Item eventKey="FORMALS">FORMALS</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Col>
+        <Col md={3}>
+          <Dropdown onSelect={(key) => setPriceFilter(key)}>
+            <Dropdown.Toggle variant="secondary">PRICE: {priceFilter}</Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item eventKey="A">A</Dropdown.Item>
+              <Dropdown.Item eventKey="B">B</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Col>
+        <Col md={3}>
+          <Button variant="secondary">GO TO INVENTORY</Button>
+        </Col>
+        <Col md={3} className={styles.textRight}>
+          <Button variant="success">BALANCE: ${balance}</Button>
+        </Col>
+      </Row>
 
-    //   {/* 3D Scene */}
-    //   <Row>
-    //     <Col>
-    //       <Canvas style={{ height: '500px' }} camera={{ position: [0, 0, 5], fov: 60 }}>
-    //         <ambientLight intensity={0.5} />
-    //         <directionalLight position={[5, 5, 5]} intensity={1} />
-    //         <Environment preset="sunset" />
+      {/* 3D Scene */}
+      <Row>
+        <Col>
+          <Canvas style={{ height: '500px' }} camera={{ position: [0, 0, 5], fov: 60 }}>
+            <ambientLight intensity={0.5} />
+            <directionalLight position={[5, 5, 5]} intensity={1} />
+            <Environment preset="sunset" />
 
-    //         {/* Center Model */}
-    //         {selectedClothing ? (
-    //           <Model url={selectedClothing.modelUrl} />
-    //         ) : (
-    //           <Model url="/models/default_character.fbx" />
-    //         )}
+            {/* Center Model */}
+            {selectedClothing ? (
+              <Model url={selectedClothing.modelUrl} />
+            ) : (
+              ""
+              // <Model url="/models/default_character.fbx" />
+            )}
 
-    //         {/* Clothing Options on Floating Platforms */}
-    //         {filteredClothing.map((item, index) => (
-    //           <group key={item.id} position={[index * 2 - 3, -1, -2]}>
-    //             <mesh
-    //               onClick={() => setSelectedClothing(item)}
-    //               position={[0, 0.5, 0]}
-    //             >
-    //               <boxGeometry args={[1, 1, 1]} />
-    //               <meshStandardMaterial color="cyan" transparent opacity={0.5} />
-    //             </mesh>
-    //             <Html position={[0, -0.5, 0]}>
-    //               <Button variant="primary" onClick={() => setSelectedClothing(item)}>
-    //                 TRY
-    //               </Button>
-    //             </Html>
-    //           </group>
-    //         ))}
-    //       </Canvas>
-    //     </Col>
-    //   </Row>
+            {/* Clothing Options on Floating Platforms */}
+            {filteredClothing.map((item, index) => (
+              <group key={item.id} position={[index * 2 - 3, -1, -2]}>
+                <mesh
+                  onClick={() => setSelectedClothing(item)}
+                  position={[0, 0.5, 0]}
+                >
+                  <boxGeometry args={[1, 1, 1]} />
+                  <meshStandardMaterial color="cyan" transparent opacity={0.5} />
+                </mesh>
+                <Html position={[0, -0.5, 0]}>
+                  <Button variant="primary" onClick={() => setSelectedClothing(item)}>
+                    TRY
+                  </Button>
+                </Html>
+              </group>
+            ))}
+          </Canvas>
+        </Col>
+      </Row>
 
-    //   {/* Bottom Bar: Buy Button */}
-    //   {selectedClothing && (
-    //     <Row className={styles.bottomBar}>
-    //       <Col className="text-center">
-    //         <Button variant="success" onClick={() => handleBuy(selectedClothing)}>
-    //           <s>$10</s> ${selectedClothing.price} BUY NOW
-    //         </Button>
-    //         <p className={styles.limitedEdition}>LIMITED EDITION! ONLY 2 REMAINING</p>
-    //       </Col>
-    //     </Row>
-    //   )}
-    // </Container>
+      {/* Bottom Bar: Buy Button */}
+      {selectedClothing && (
+        <Row className={styles.bottomBar}>
+          <Col className="text-center">
+            <Button variant="success" onClick={() => handleBuy(selectedClothing)}>
+              <s>$10</s> ${selectedClothing.price} BUY NOW
+            </Button>
+            <p className={styles.limitedEdition}>LIMITED EDITION! ONLY 2 REMAINING</p>
+          </Col>
+        </Row>
+      )}
+    </Container>
 
-    <div style={{ height: "100vh", background: "#121212" }}>
-      <Canvas camera={{ position: [0, 0, 5] }}>
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
-        <ClothingModel modelPath="/assets/img/cloth/ClothsAndCharacter/Cloth1/Model/TShirt1.fbx" />
-        <OrbitControls />
-      </Canvas>
-    </div>
+    // <div style={{ height: "100vh", background: "#121212" }}>
+    //   <Canvas camera={{ position: [0, 0, 5] }}>
+    //     <ambientLight intensity={0.5} />
+    //     <pointLight position={[10, 10, 10]} />
+    //     <ClothingModel modelPath="/assets/img/cloth/ClothsAndCharacter/Cloth1/Model/TShirt1.fbx" />
+    //     <OrbitControls />
+    //   </Canvas>
+    // </div>
   );
 };
 
