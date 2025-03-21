@@ -125,7 +125,6 @@ const HeaderOne = () => {
           </div>
 
           <div>
-            
             <SpectateButton />
           </div>
           <div>
