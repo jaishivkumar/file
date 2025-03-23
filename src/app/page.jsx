@@ -1,7 +1,7 @@
 
 import HeaderOne from "@/components/HeaderOne";
 
- import HomeCustom from "@/components/HomeCustom"
+ import HomeCustom from "@/components/Home/HomeCustom"
 export const metadata = {
   title: "DYAT - eSports and Gaming NFT NEXT JS Template",
   description:

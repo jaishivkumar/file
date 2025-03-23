@@ -123,347 +123,27 @@ const HeaderOne = () => {
           <div>
             <SucribeButton />
           </div>
-          {/* <div className='collapse navbar-collapse' id='xdyat_main_menu'>
-            <ul className='navbar-nav menu-open ps-xl-5 pe-xl-4 text-end'>
-              <li className='menu-item-has-children'>
-                <Link
-                  className={
-                    ["/", "/index-2", "/index-3"].includes(location)
-                      ? "active"
-                      : ""
-                  }
-                  href='#'
-                >
-                  Home
-                </Link>
-                <ul className='sub-menu'>
-                  <li>
-                    <Link
-                      className={location === "/" ? "current" : ""}
-                      href='/'
-                    >
-                      Home 01
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href='/index-2'
-                      className={location === "/index-2" ? "current" : ""}
-                    >
-                      Home 02
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href='/index-3'
-                      className={location === "/index-3" ? "current" : ""}
-                    >
-                      Home 03
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <Link
-                  href='/about'
-                  className={["/about"].includes(location) ? "active" : ""}
-                >
-                  About Us
-                </Link>
-              </li>
-              <li className='menu-item-has-children'>
-                <Link
-                  className={
-                    ["/tournament", "/tournament-details"].includes(location)
-                      ? "active"
-                      : ""
-                  }
-                  href='#'
-                >
-                  Tournament
-                </Link>
-                <ul className='sub-menu'>
-                  <li>
-                    <Link
-                      href='/tournament'
-                      className={location === "/tournament" ? "current" : ""}
-                    >
-                      Tournament
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href='/tournament-details'
-                      className={
-                        location === "/tournament-details" ? "current" : ""
-                      }
-                    >
-                      Tournament Details
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              {/* <li className='menu-item-has-children'>
-                <Link
-                  className={
-                    [
-                      "/shop",
-                      "/shop-details",
-                      "/explore-product",
-                      "/cart",
-                      "/checkout",
-                    ].includes(location)
-                      ? "active"
-                      : ""
-                  }
-                  href='#'
-                >
-                  Shop
-                </Link>
-                <ul className='sub-menu'>
-                  <li>
-                    <Link
-                      className={location === "/shop" ? "current" : ""}
-                      href='/shop'
-                    >
-                      Shop
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/shop-details" ? "current" : ""}
-                      href='/shop-details'
-                    >
-                      Shop Details
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={
-                        location === "/explore-product" ? "current" : ""
-                      }
-                      href='/explore-product'
-                    >
-                      Explore product
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/cart" ? "current" : ""}
-                      href='/cart'
-                    >
-                      Cart
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/checkout" ? "current" : ""}
-                      href='/checkout'
-                    >
-                      Checkout
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li className='menu-item-has-children dropdown-sub-menu'>
-                <Link
-                  className={
-                    [
-                      "/blog",
-                      "/blog-list",
-                      "/blog-grid",
-                      "/create-item",
-                      "/blog-details",
-                      "/creators",
-                      "/creator-details",
-                      "/service",
-                      "/service-details",
-                      "/team",
-                      "/team-details",
-                      "/auction",
-                      "/help-center",
-                      "/login",
-                      "/wallet",
-                      "/error",
-                    ].includes(location)
-                      ? "active"
-                      : ""
-                  }
-                  href='#'
-                >
-                  Pages
-                </Link>
-                <ul className='sub-menu'>
-                  <li>
-                    <Link
-                      className={location === "/blog" ? "current" : ""}
-                      href='/blog'
-                    >
-                      Blog
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/blog-list" ? "current" : ""}
-                      href='/blog-list'
-                    >
-                      Blog List
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/blog-grid" ? "current" : ""}
-                      href='/blog-grid'
-                    >
-                      Blog Grid
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/blog-details" ? "current" : ""}
-                      href='/blog-details'
-                    >
-                      Blog Details
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/create-item" ? "current" : ""}
-                      href='/create-item'
-                    >
-                      Create Items
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/creators" ? "current" : ""}
-                      href='/creators'
-                    >
-                      Creators
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={
-                        location === "/creator-details" ? "current" : ""
-                      }
-                      href='/creator-details'
-                    >
-                      Creator details
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/service" ? "current" : ""}
-                      href='/service'
-                    >
-                      service
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={
-                        location === "/service-details" ? "current" : ""
-                      }
-                      href='/service-details'
-                    >
-                      Service Details
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/team" ? "current" : ""}
-                      href='/team'
-                    >
-                      team
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/team-details" ? "current" : ""}
-                      href='/team-details'
-                    >
-                      team Details
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/auction" ? "current" : ""}
-                      href='/auction'
-                    >
-                      Auction
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/help-center" ? "current" : ""}
-                      href='/help-center'
-                    >
-                      Help Center
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/login" ? "current" : ""}
-                      href='/login'
-                    >
-                      Login
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/wallet" ? "current" : ""}
-                      href='/wallet'
-                    >
-                      Wallet
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className={location === "/error" ? "current" : ""}
-                      href='/error'
-                    >
-                      404
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <Link
-                  className={["/contact"].includes(location) ? "active" : ""}
-                  href='/contact'
-                >
-                  Contact Us
-                </Link>
-              </li> */}
-            {/* </ul>
-          // </div> */}
 
           <div>
+            <SpectateButton />
+          </div>
+          <div>
+            <PlayButton />
+          </div>
+          <div>
+            <Shope />
+          </div>
+          <AuthHeaderButtons />
+          {/* <div>
 
-                <SpectateButton/>
-              </div>
-              <div>
-                <PlayButton/>
-              </div>
-              <div>
-              <Shope/>
-              </div>
-             <div>
-              <play/>
-             </div>
-           <div>
-
-           <Login/>
-           {/* <Profile/> */}
-            </div>
-            <div>
+            <Login/>
+            <Profile/>
+          </div> */}
+          {/* <div>
        <Signup/>
-       </div>
 
+       </div> */}
         </div>
-
-
       </nav>
       {/* navbar end */}
       {/* off canvas */}
@@ -495,9 +175,9 @@ const HeaderOne = () => {
             {/* <Link href='/'>
               <img src='assets/img/logo.png' alt='Logo' />
             </Link> */}
-             <Link href='/'>
-                <img src='assets/fonts/logo.png' alt='img' />
-              </Link>
+            <Link href="/">
+              <img src="assets/fonts/logo.png" alt="img" />
+            </Link>
           </div>
 
           {/* Navbar Links */}
@@ -516,42 +196,9 @@ const HeaderOne = () => {
                 >
                   <SpectateButton />
                 </Link>
-                <Link
-                  href='#'
-
-                >
-                  <PlayButton/>
+                <Link href="#">
+                  <PlayButton />
                 </Link>
-
-                {/* <ul
-                  className='sub-menu'
-                  style={{ display: activeMenu === 0 ? "block" : "none" }}
-                >
-                  <li>
-                    <Link
-                      href='/'
-                      className={location === "/" ? "current" : ""}
-                    >
-                      Home 01
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href='/index-2'
-                      className={location === "/index-2" ? "current" : ""}
-                    >
-                      Home 02
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href='/index-3'
-                      className={location === "/index-3" ? "current" : ""}
-                    >
-                      Home 03
-                    </Link>
-                  </li>
-                </ul> */}
               </li>
 
               <li>

@@ -13,9 +13,14 @@
   
   .videoSection,
   .multiViewSection {
-    height: 100%;
+    /* height: 100%;
     width: 100%;
-    position: relative;
+    position: relative; */
+
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    background-color: #000;
   }
   
   .videoContainer {
@@ -32,26 +37,34 @@
   
   /* Multi View Styles - Matching the second image */
   .multiViewGrid {
-    display: grid;
+    /* display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
     gap: 12px;
     padding: 12px;
     height: 100%;
-    background-color: #0a0a0a;
+    background-color: #0a0a0a; */
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 8px;
+    width: 100%;
+    height: 100%;
   }
   
   .multiViewItem {
     position: relative;
-    border-radius: 4px;
-    overflow: hidden;
-    border: 2px solid #333; /* Default border */
+    width: 100%;
     height: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    transition: all 0.3s ease;
   }
   
   /* Highlight the active camera with blue border */
   .activeCamera {
-    border: 2px solid #0066cc; /* Blue border for active camera */
+    border: 2px solid #3b82f6;
   }
   
   .cameraContainer {
@@ -62,9 +75,9 @@
   }
   
   .smallVideo {
-    width: 100%;
-    height: 100%;
     object-fit: cover;
+  width: 100%;
+  height: 100%;
   }
   
   /* Camera icon in circle */
@@ -99,7 +112,7 @@
   
   /* Camera label and expand button */
   .cameraLabel {
-    position: absolute;
+    /* position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
@@ -109,7 +122,20 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 14px;
+    font-size: 14px; */
+
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: white;
+    padding: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
   }
   
   .expandButton {
@@ -121,7 +147,56 @@
     align-items: center;
     gap: 5px;
     font-size: 12px;
+  /* border-radius: 12px; */
+  /* padding: 4px 8px;
+  font-size: 12px; */
+  cursor: pointer;
+  transition: background-color 0.2s;
   }
+  
+
+  .expandButton:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  .activeIndicator {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+  
+  .activeDot {
+    width: 10px;
+    height: 10px;
+    background-color: #10b981; /* Green color */
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+  
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+    }
+  
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+  }
+  
   
   /* Main view elements */
   .mainCam {
@@ -458,3 +533,22 @@
   
   
   
+  .smallViewerCount {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 10;
+  }
+  
+  .smallViewerCount .icon {
+    width: 12px;
+    height: 12px;
+  }
