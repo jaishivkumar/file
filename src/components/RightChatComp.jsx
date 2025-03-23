@@ -52,7 +52,8 @@ const RealTimeChatComp = ({ streamId = "default-stream" }) => {
       transports: ["websocket"],
       auth: {
         anonymousId,
-        customUsername: `User${Math.floor(Math.random() * 10000)}`,
+        customUsername: isLoggedIn && userData ? userData.username : `User${Math.floor(Math.random() * 10000)}`,
+        customProfilePicture: isLoggedIn && userData ? userData.avatar : null,
       },
     })
 
@@ -93,7 +94,7 @@ const RealTimeChatComp = ({ streamId = "default-stream" }) => {
         newSocket.disconnect()
       }
     }
-  }, [anonymousId, streamId])
+  }, [anonymousId, streamId, isLoggedIn, userData])
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -146,10 +147,13 @@ const RealTimeChatComp = ({ streamId = "default-stream" }) => {
       return
     }
 
-    // If logged in, send the message
+    // If logged in, send the message with real username
     socket.emit("send_message", {
       content: message,
       streamId,
+      anonymousName: userData?.username || `User${Math.floor(Math.random() * 10000)}`,
+      anonymousId,
+      customProfilePicture: userData?.avatar || null,
     })
 
     setMessage("")
