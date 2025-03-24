@@ -1,4 +1,5 @@
-"use client"
+
+// "use client"
 
 // import Image from "next/image"
 // import { useState, useEffect, useCallback, useMemo } from "react"
@@ -8,29 +9,12 @@
 // import WebRTCStream from "../../components/Home/WebRTCConnection"
 
 // export default function HomeCustom() {
-//   const socketContext = useSocket()
-//   const socket = socketContext?.socket
-//   const isConnected = socketContext?.isConnected || false
-
-//   const [isChatOpen, setIsChatOpen] = useState(true)
-//   const [viewMode, setViewMode] = useState("single")
-//   const [selectedCamera, setSelectedCamera] = useState(1) // Set to main camera ID initially
-//   const [viewerCounts, setViewerCounts] = useState({
-//     1: 0,
-//     2: 0,
-//     3: 0,
-//     4: 0,
-//   })
-//   const [isLoading, setIsLoading] = useState(true)
-//   const [activeVideos, setActiveVideos] = useState({}) // Track which videos are currently playing
-//   const [useWebRTC, setUseWebRTC] = useState(true) // Default to using WebRTC
-
 //   // Define cameras that will be shown in multi-view (excluding main camera initially)
 //   const otherCameras = useMemo(
 //     () => [
-//       { id: 2, name: "Shopping Mall", src: "/public/assets/videos/video1.mp4", streamId: "stream-2" },
-//       { id: 3, name: "Office", src: "/public/assets/videos/office.mp4", streamId: "stream-3" },
-//       { id: 4, name: "Orchestra", src: "/public/assets/videos/orchestra.mp4", streamId: "stream-4" },
+//       { id: 2, name: "Shopping Mall", src: "/assets/videos/video1.mp4", streamId: "stream-2" },
+//       { id: 3, name: "Office", src: "/assets/videos/office.mp4", streamId: "stream-3" },
+//       { id: 4, name: "Orchestra", src: "/assets/videos/orchestra.mp4", streamId: "stream-4" },
 //     ],
 //     [],
 //   )
@@ -48,6 +32,28 @@
 
 //   // All cameras array for convenience
 //   const allCameras = useMemo(() => [mainCamera, ...otherCameras], [mainCamera, otherCameras])
+
+//   // console.log("HomeCustom component rendering with the following cameras:", {
+//   //   main: mainCamera,
+//   //   others: otherCameras,
+//   //   allCameras: allCameras,
+//   // })
+//   const socketContext = useSocket()
+//   const socket = socketContext?.socket
+//   const isConnected = socketContext?.isConnected || false
+
+//   const [isChatOpen, setIsChatOpen] = useState(true)
+//   const [viewMode, setViewMode] = useState("single")
+//   const [selectedCamera, setSelectedCamera] = useState(1) // Set to main camera ID initially
+//   const [viewerCounts, setViewerCounts] = useState({
+//     1: 0,
+//     2: 0,
+//     3: 0,
+//     4: 0,
+//   })
+//   const [isLoading, setIsLoading] = useState(true)
+//   const [activeVideos, setActiveVideos] = useState({}) // Track which videos are currently playing
+//   const [useWebRTC, setUseWebRTC] = useState(true) // Default to using WebRTC
 
 //   // Function to fetch viewer counts from API
 //   const fetchViewerCounts = useCallback(async () => {
@@ -328,8 +334,35 @@
 //                   onPlay={() => handleVideoPlay(camera.id)}
 //                   onPause={() => handleVideoPause(camera.id)}
 //                   onEnded={() => handleVideoPause(camera.id)}
+//                   onError={(e) => {
+//                     console.log(`Failed to load video: ${camera.src}`)
+//                     // Try alternative path if the original fails
+//                     const videoElement = e.target
+//                     const originalSrc = camera.src
+//                     const alternativeSrc = originalSrc.startsWith("/assets/")
+//                       ? originalSrc.replace("/assets/", "/")
+//                       : `/assets${originalSrc}`
+
+//                     videoElement.src = alternativeSrc
+//                     console.log(`Trying alternative path: ${alternativeSrc}`)
+
+//                     // If that also fails, show a placeholder
+//                     videoElement.onerror = () => {
+//                       console.log(`Alternative path also failed: ${alternativeSrc}`)
+//                       // Replace with a placeholder image
+//                       const parent = videoElement.parentElement
+//                       if (parent) {
+//                         const img = document.createElement("img")
+//                         img.src = "/placeholder.svg?height=480&width=640"
+//                         img.alt = camera.name
+//                         img.className = videoElement.className
+//                         parent.replaceChild(img, videoElement)
+//                       }
+//                     }
+//                   }}
 //                 >
 //                   <source src={camera.src} type="video/mp4" />
+//                   Your browser does not support the video tag.
 //                 </video>
 //               )}
 //             </>
@@ -367,7 +400,17 @@
 
 //               <div className={styles.liveIndicator}>
 //                 <div className={styles.liveIcon}>
-//                   <Image src="/assets/img/live.png" width={16} height={16} alt="Live" className={styles.icon} />
+//                   <Image
+//                     src="/assets/img/live.png"
+//                     width={16}
+//                     height={16}
+//                     alt="Live"
+//                     className={styles.icon}
+//                     onError={(e) => {
+//                       e.target.src = "/placeholder.svg?height=16&width=16"
+//                       console.log("Failed to load image: /assets/img/live.png")
+//                     }}
+//                   />
 //                   LIVE
 //                 </div>
 //                 <div className={styles.viewerCount}>
@@ -377,6 +420,10 @@
 //                     height={16}
 //                     alt="Viewers"
 //                     className={styles.icon}
+//                     onError={(e) => {
+//                       e.target.src = "/placeholder.svg?height=16&width=16"
+//                       console.log("Failed to load image: /assets/img/iconImage/livefeed_3106921.png")
+//                     }}
 //                   />
 //                   {viewerCount}
 //                 </div>
@@ -396,6 +443,10 @@
 //                 height={12}
 //                 alt="Viewers"
 //                 className={styles.icon}
+//                 onError={(e) => {
+//                   e.target.src = "/placeholder.svg?height=16&width=16"
+//                   console.log("Failed to load image: /assets/img/iconImage/livefeed_3106921.png")
+//                 }}
 //               />
 //               <span>{viewerCount}</span>
 //             </div>
@@ -446,7 +497,17 @@
 //       <div className={styles.gameSection}>
 //         <div className={styles.gameContainer}>
 //           <div className="relative w-full h-[230px]">
-//             <Image src="/assets/img/funds/2d.png" alt="Game platform" fill className={styles.gamePlatform} priority />
+//             <Image
+//               src="/assets/img/funds/2d.png"
+//               alt="Game platform"
+//               fill
+//               className={styles.gamePlatform}
+//               priority
+//               onError={(e) => {
+//                 e.target.src = "/placeholder.svg?height=230&width=800"
+//                 console.log("Failed to load game platform image: /assets/img/funds/2d.png")
+//               }}
+//             />
 //           </div>
 //           <div className={styles.gameControls}>
 //             <div className={styles.controlsLeft}>
@@ -521,11 +582,12 @@
 "use client"
 
 import Image from "next/image"
-import { useState, useEffect, useCallback, useMemo } from "react"
+import { useState, useEffect, useCallback, useMemo, useRef } from "react"
 import styles from "../../viewscreen/screen.module.css"
 import { useSocket } from "../contexts/SocketContext"
 import apiService from "../contexts/api-service"
 import WebRTCStream from "../../components/Home/WebRTCConnection"
+import VideoQualitySettings from "../Home/VideoQualitySettings"
 
 export default function HomeCustom() {
   // Define cameras that will be shown in multi-view (excluding main camera initially)
@@ -573,6 +635,98 @@ export default function HomeCustom() {
   const [isLoading, setIsLoading] = useState(true)
   const [activeVideos, setActiveVideos] = useState({}) // Track which videos are currently playing
   const [useWebRTC, setUseWebRTC] = useState(true) // Default to using WebRTC
+  const [videoQuality, setVideoQuality] = useState("auto")
+  const [videoFrameRate, setVideoFrameRate] = useState("60")
+  const videoRefs = useRef({})
+
+  // Handle video pause - decrement viewer count
+  const handleVideoPause = useCallback(
+    (cameraId) => {
+      // If not active, don't do anything
+      if (!activeVideos[cameraId]) return
+
+      // Find the camera
+      const camera = allCameras.find((cam) => cam.id === cameraId)
+      if (!camera) return
+
+      console.log(`Video stopped playing for camera ${cameraId}`)
+
+      // Mark this video as inactive
+      setActiveVideos((prev) => {
+        const newState = { ...prev }
+        delete newState[cameraId]
+        return newState
+      })
+
+      // Leave the stream room via socket
+      if (socket && isConnected) {
+        console.log(`Leaving stream room for ${camera.streamId}`)
+        socket.emit("leave_stream", { streamId: camera.streamId })
+      }
+
+      // Also decrement via API as a fallback
+      apiService
+        .decrementViewerCount(camera.streamId)
+        .then((response) => {
+          if (response.success) {
+            console.log(`Decremented viewer count for ${camera.name} to ${response.viewerCount}`)
+            // Update local state with the new count
+            setViewerCounts((prev) => ({
+              ...prev,
+              [camera.id]: response.viewerCount,
+            }))
+          }
+        })
+        .catch((err) => {
+          console.error(`Failed to decrement viewer count for camera ${cameraId}:`, err)
+        })
+    },
+    [activeVideos, allCameras, socket, isConnected],
+  )
+
+  // Handle video play - increment viewer count
+  const handleVideoPlay = useCallback(
+    (cameraId) => {
+      // If already active, don't do anything
+      if (activeVideos[cameraId]) return
+
+      // Find the camera
+      const camera = allCameras.find((cam) => cam.id === cameraId)
+      if (!camera) return
+
+      console.log(`Video started playing for camera ${cameraId}`)
+
+      // Mark this video as active
+      setActiveVideos((prev) => ({
+        ...prev,
+        [cameraId]: true,
+      }))
+
+      // Join the stream room via socket
+      if (socket && isConnected) {
+        console.log(`Joining stream room for ${camera.streamId}`)
+        socket.emit("join_stream", { streamId: camera.streamId })
+      }
+
+      // Also increment via API as a fallback
+      apiService
+        .incrementViewerCount(camera.streamId)
+        .then((response) => {
+          if (response.success) {
+            console.log(`Incremented viewer count for ${camera.name} to ${response.viewerCount}`)
+            // Update local state with the new count
+            setViewerCounts((prev) => ({
+              ...prev,
+              [camera.id]: response.viewerCount,
+            }))
+          }
+        })
+        .catch((err) => {
+          console.error(`Failed to increment viewer count for camera ${cameraId}:`, err)
+        })
+    },
+    [activeVideos, allCameras, socket, isConnected],
+  )
 
   // Function to fetch viewer counts from API
   const fetchViewerCounts = useCallback(async () => {
@@ -674,8 +828,31 @@ export default function HomeCustom() {
       const currentCamera = getCurrentCamera()
       setTimeout(() => handleVideoPlay(currentCamera.id), 100)
     }
-  }, [viewMode, getCurrentCamera, activeVideos])
+  }, [viewMode, getCurrentCamera, activeVideos, handleVideoPlay, handleVideoPause])
 
+  // Handle camera selection change
+  const handleCameraChange = useCallback(
+    (newCameraId) => {
+      // If there's a currently selected camera, leave its stream
+      if (selectedCamera) {
+        const currentCamera = allCameras.find((cam) => cam.id === selectedCamera)
+        if (currentCamera) {
+          handleVideoPause(currentCamera.id)
+        }
+      }
+
+      // Set the new selected camera
+      setSelectedCamera(newCameraId)
+
+      // If in single view, play the new camera's video
+      if (viewMode === "single") {
+        setTimeout(() => handleVideoPlay(newCameraId), 100)
+      }
+    },
+    [selectedCamera, allCameras, viewMode, handleVideoPause, handleVideoPlay],
+  )
+
+  // Then update the expandCamera function to use this
   const expandCamera = useCallback(
     (camera) => {
       // Leave all current streams
@@ -684,105 +861,49 @@ export default function HomeCustom() {
       })
 
       // Set new camera and switch to single view
-      setSelectedCamera(camera.id)
+      handleCameraChange(camera.id)
       setViewMode("single")
 
       // Reset active videos
       setActiveVideos({})
-
-      // Mark this camera as active after a short delay to ensure state updates
-      setTimeout(() => handleVideoPlay(camera.id), 100)
     },
-    [activeVideos],
+    [activeVideos, handleVideoPause, handleCameraChange],
   )
 
-  // Handle video play - increment viewer count
-  const handleVideoPlay = useCallback(
-    (cameraId) => {
-      // If already active, don't do anything
-      if (activeVideos[cameraId]) return
+  // Handle quality change
+  const handleQualityChange = useCallback(
+    (quality, frameRate) => {
+      console.log(`Quality changed to: ${quality}, Frame rate: ${frameRate}`)
+      setVideoQuality(quality)
+      setVideoFrameRate(frameRate)
 
-      // Find the camera
-      const camera = allCameras.find((cam) => cam.id === cameraId)
-      if (!camera) return
-
-      console.log(`Video started playing for camera ${cameraId}`)
-
-      // Mark this video as active
-      setActiveVideos((prev) => ({
-        ...prev,
-        [cameraId]: true,
-      }))
-
-      // Join the stream room via socket
-      if (socket && isConnected) {
-        console.log(`Joining stream room for ${camera.streamId}`)
-        socket.emit("join_stream", { streamId: camera.streamId })
-      }
-
-      // Also increment via API as a fallback
-      apiService
-        .incrementViewerCount(camera.streamId)
-        .then((response) => {
-          if (response.success) {
-            console.log(`Incremented viewer count for ${camera.name} to ${response.viewerCount}`)
-            // Update local state with the new count
-            setViewerCounts((prev) => ({
-              ...prev,
-              [camera.id]: response.viewerCount,
-            }))
+      // Apply quality settings to all video elements
+      Object.keys(videoRefs.current).forEach((cameraId) => {
+        const videoElement = videoRefs.current[cameraId]
+        if (videoElement) {
+          // Apply quality settings based on the selected option
+          // This is a simplified implementation - in a real app, you would
+          // need to handle this differently based on your video source
+          if (quality !== "auto") {
+            // Set video resolution based on quality
+            const height = Number.parseInt(quality.replace("p", ""))
+            if (!isNaN(height)) {
+              // For WebRTC, you would need to renegotiate with specific constraints
+              // For regular videos, we can just set the CSS properties
+              if (!useWebRTC) {
+                videoElement.style.maxHeight = `${height}px`
+              }
+            }
+          } else {
+            // Auto quality - remove any restrictions
+            if (!useWebRTC) {
+              videoElement.style.maxHeight = "none"
+            }
           }
-        })
-        .catch((err) => {
-          console.error(`Failed to increment viewer count for camera ${cameraId}:`, err)
-        })
-    },
-    [activeVideos, allCameras, socket, isConnected],
-  )
-
-  // Handle video pause - decrement viewer count
-  const handleVideoPause = useCallback(
-    (cameraId) => {
-      // If not active, don't do anything
-      if (!activeVideos[cameraId]) return
-
-      // Find the camera
-      const camera = allCameras.find((cam) => cam.id === cameraId)
-      if (!camera) return
-
-      console.log(`Video stopped playing for camera ${cameraId}`)
-
-      // Mark this video as inactive
-      setActiveVideos((prev) => {
-        const newState = { ...prev }
-        delete newState[cameraId]
-        return newState
+        }
       })
-
-      // Leave the stream room via socket
-      if (socket && isConnected) {
-        console.log(`Leaving stream room for ${camera.streamId}`)
-        socket.emit("leave_stream", { streamId: camera.streamId })
-      }
-
-      // Also decrement via API as a fallback
-      apiService
-        .decrementViewerCount(camera.streamId)
-        .then((response) => {
-          if (response.success) {
-            console.log(`Decremented viewer count for ${camera.name} to ${response.viewerCount}`)
-            // Update local state with the new count
-            setViewerCounts((prev) => ({
-              ...prev,
-              [camera.id]: response.viewerCount,
-            }))
-          }
-        })
-        .catch((err) => {
-          console.error(`Failed to decrement viewer count for camera ${cameraId}:`, err)
-        })
     },
-    [activeVideos, allCameras, socket, isConnected],
+    [useWebRTC],
   )
 
   // Cleanup on unmount
@@ -805,6 +926,13 @@ export default function HomeCustom() {
       handleVideoPlay(currentCamera.id)
     }
   }, [viewMode, selectedCamera, getCurrentCamera, handleVideoPlay])
+
+  // Store video element references
+  const setVideoRef = useCallback((element, cameraId) => {
+    if (element) {
+      videoRefs.current[cameraId] = element
+    }
+  }, [])
 
   const renderCameraView = useCallback(
     (camera, isMain = false) => {
@@ -829,6 +957,9 @@ export default function HomeCustom() {
               className={isMain ? styles.videoPlayer : styles.smallVideo}
               onPlay={() => handleVideoPlay(camera.id)}
               onPause={() => handleVideoPause(camera.id)}
+              ref={(el) => setVideoRef(el, camera.id)}
+              quality={videoQuality}
+              frameRate={videoFrameRate}
             />
           ) : (
             // Fallback to regular video elements
@@ -844,6 +975,7 @@ export default function HomeCustom() {
                 />
               ) : (
                 <video
+                  ref={(el) => setVideoRef(el, camera.id)}
                   className={isMain ? styles.videoPlayer : styles.smallVideo}
                   muted
                   loop
@@ -950,6 +1082,9 @@ export default function HomeCustom() {
               <div className={styles.infoBox}>
                 <p>Did you know that there are Segways you can ride in Starlight Plaza?</p>
               </div>
+
+              {/* Add Video Quality Settings component */}
+              <VideoQualitySettings streamId={camera.streamId} onQualityChange={handleQualityChange} />
             </>
           )}
 
@@ -980,7 +1115,20 @@ export default function HomeCustom() {
         </div>
       )
     },
-    [viewerCounts, viewMode, activeVideos, useWebRTC, handleVideoPlay, handleVideoPause, expandCamera, toggleViewMode],
+    [
+      viewerCounts,
+      viewMode,
+      activeVideos,
+      useWebRTC,
+      videoQuality,
+      videoFrameRate,
+      handleVideoPlay,
+      handleVideoPause,
+      expandCamera,
+      toggleViewMode,
+      setVideoRef,
+      handleQualityChange,
+    ],
   )
 
   return (
@@ -1092,10 +1240,12 @@ export default function HomeCustom() {
             </button>
           </div>
         </div>
-      </div> 
+      </div>
     </div>
   )
 }
+
+
 
 
 

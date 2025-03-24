@@ -51,7 +51,6 @@ export const SocketProvider = ({ children }) => {
       setIsConnected(true)
       console.log("Socket connected")
     }
-
     const onDisconnect = () => {
       setIsConnected(false)
       console.log("Socket disconnected")

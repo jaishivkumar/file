@@ -65,7 +65,6 @@ export default function RootLayout({ children }) {
         <div className={styles.container}>
           <div className={styles.contentWrapper}>
             {children}
-
             <button
               className={`${styles.chatToggleBtn} ${!isChatOpen ? styles.chatToggleBtnClosed : ""
                 }`}

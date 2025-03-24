@@ -6,6 +6,21 @@ import Image from "next/image"
 import io from "socket.io-client"
 import AuthHeaderButtons from "../components/SignupLogin"
 
+// Helper function to validate and fix image URLs
+const getValidImageUrl = (url) => {
+  // Check if the URL is valid (starts with http://, https://, or /)
+  if (!url || typeof url !== "string") {
+    return "/placeholder.svg?height=30&width=30"
+  }
+
+  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/")) {
+    return url
+  }
+
+  // If it's not a valid URL format, use a placeholder
+  return "/placeholder.svg?height=30&width=30"
+}
+
 const RealTimeChatComp = ({ streamId = "default-stream" }) => {
   const [isChatOpen, setIsChatOpen] = useState(true)
   const [socket, setSocket] = useState(null)
@@ -53,6 +68,8 @@ const RealTimeChatComp = ({ streamId = "default-stream" }) => {
       auth: {
         anonymousId,
         customUsername: `User${Math.floor(Math.random() * 10000)}`,
+        realUsername: isLoggedIn && userData ? userData.username : null,
+        token: localStorage.getItem("authToken") || null,
       },
     })
 
@@ -72,12 +89,29 @@ const RealTimeChatComp = ({ streamId = "default-stream" }) => {
 
     newSocket.on("new_message", (newMessage) => {
       console.log("New message received:", newMessage)
+      // Fix any invalid profile picture URLs
+      if (newMessage.sender && newMessage.sender.profilePicture) {
+        newMessage.sender.profilePicture = getValidImageUrl(newMessage.sender.profilePicture)
+      }
       setMessages((prev) => [...prev, newMessage])
     })
 
     newSocket.on("recent_messages", (recentMessages) => {
       console.log("Recent messages received:", recentMessages)
-      setMessages(recentMessages)
+      // Fix any invalid profile picture URLs in recent messages
+      const fixedMessages = recentMessages.map((msg) => {
+        if (msg.sender && msg.sender.profilePicture) {
+          return {
+            ...msg,
+            sender: {
+              ...msg.sender,
+              profilePicture: getValidImageUrl(msg.sender.profilePicture),
+            },
+          }
+        }
+        return msg
+      })
+      setMessages(fixedMessages)
     })
 
     newSocket.on("error", (error) => {
@@ -109,7 +143,20 @@ const RealTimeChatComp = ({ streamId = "default-stream" }) => {
         )
         const data = await response.json()
         if (data.messages && data.messages.length > 0) {
-          setMessages(data.messages)
+          // Fix any invalid profile picture URLs in fetched messages
+          const fixedMessages = data.messages.map((msg) => {
+            if (msg.sender && msg.sender.profilePicture) {
+              return {
+                ...msg,
+                sender: {
+                  ...msg.sender,
+                  profilePicture: getValidImageUrl(msg.sender.profilePicture),
+                },
+              }
+            }
+            return msg
+          })
+          setMessages(fixedMessages)
         }
       } catch (error) {
         console.error("Error fetching messages:", error)
@@ -155,6 +202,22 @@ const RealTimeChatComp = ({ streamId = "default-stream" }) => {
     setMessage("")
   }
 
+  useEffect(() => {
+    if (socket) {
+      // Update socket auth when login status changes
+      socket.auth = {
+        ...socket.auth,
+        realUsername: isLoggedIn && userData ? userData.username : null,
+        token: localStorage.getItem("authToken") || null,
+      }
+
+      // Reconnect to apply the new auth
+      if (isLoggedIn && userData) {
+        socket.disconnect().connect()
+      }
+    }
+  }, [isLoggedIn, userData, socket])
+
   return (
     <>
       {isChatOpen ? (
@@ -188,12 +251,12 @@ const RealTimeChatComp = ({ streamId = "default-stream" }) => {
               <div className={styles.systemMessage}>No messages yet. Start chatting!</div>
             ) : (
               messages.map((msg) => (
-                <div key={msg.id} className={styles.chatMessage} >
-                  <p className={styles.messageText}>&quot;{msg.content}&quot;</p>
-                  <div className={styles.messageUser} >
+                <div key={msg.id} className={styles.chatMessage}>
+                  <p className={styles.messageText}>{msg.content}</p>
+                  <div className={styles.messageUser}>
                     <div className={styles.userAvatar}>
                       <Image
-                        src={msg.sender.profilePicture || "/placeholder.svg?height=30&width=30"}
+                        src={getValidImageUrl(msg.sender?.profilePicture) || "/placeholder.svg?height=30&width=30"}
                         width={30}
                         height={30}
                         alt="User avatar"
@@ -201,7 +264,7 @@ const RealTimeChatComp = ({ streamId = "default-stream" }) => {
                       />
                     </div>
                     <div className={styles.userInfo}>
-                      <div className={styles.userName}>{msg.sender.username}</div>
+                      <div className={styles.userName}>{msg.sender?.username || "Anonymous"}</div>
                       <div className={styles.userLocation}>{new Date(msg.timestamp).toLocaleTimeString()}</div>
                     </div>
                     <button className={styles.shareButton}>
